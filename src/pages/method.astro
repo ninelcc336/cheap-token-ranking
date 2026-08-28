@@ -2,13 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatMetric, getLatestMeasuredDate, getRankedPlans } from '../data/plans';
 
-const rankedPlans = getRankedPlans();
+const rankedPlans = getRankedPlans('GPT');
 const latestMeasuredDate = getLatestMeasuredDate();
-const examplePlan = rankedPlans.find((plan) => plan.name === 'code for plus 140元');
+const examplePlan = rankedPlans.find(
+  (plan) => plan.stationId === 'codex-for' && plan.channel === 'Plus' && plan.offerKind === 'bundle',
+);
 // 统一基础路径格式，确保返回榜单链接在 GitHub Pages 项目站点中有效。
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 const homeHref = base;
+const offerLabels = {
+  standard: '倍率套餐',
+  bundle: '特殊捆绑包',
+} as const;
 const formatDate = (date: string) => date.replaceAll('-', '.');
 ---
 
@@ -20,12 +26,26 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
     <div>
       <p class="eyebrow">METHOD / SCOPE</p>
       <h1 id="method-title">计算方法</h1>
-      <p class="intro-copy">所有方案使用相同公式计算；页面展示值保留两位小数，排名使用完整精度。</p>
+      <p class="intro-copy">所有中转站的模型倍率使用相同公式计算；页面展示值保留两位小数，排名使用完整精度。</p>
     </div>
     <div class="intro-meta">
       <span class="meta-label">返回榜单</span>
       <a class="text-link" href={homeHref}>查看方案排名 <span aria-hidden="true">→</span></a>
     </div>
+  </section>
+
+  <section class="structure-section" aria-labelledby="structure-title">
+    <div>
+      <p class="eyebrow">DATA MODEL</p>
+      <h2 id="structure-title">数据源结构</h2>
+    </div>
+    <ol class="structure-list">
+      <li><strong>中转站</strong><span><code>stations</code> 只记录站点名称和官网链接，多个模型共享同一站点。</span></li>
+      <li><strong>充值档位</strong><span><code>rechargeOffers</code> 记录充值金额、美元面值和捆绑包标识，不重复绑定模型。</span></li>
+      <li><strong>模型倍率</strong><span><code>modelRates</code> 记录模型、渠道和倍率，并通过 <code>offerIds</code> 指定适用充值档位。</span></li>
+      <li><strong>排名组合</strong><span>构建时把模型倍率和它引用的充值档位展开，随后计算有效额度和每元有效额度。</span></li>
+    </ol>
+    <p class="structure-note">当前 Claude 参数没有单独注明充值档位，因此复用对应站点已有档位；codex for 的 kiro 会展开为 140 元特殊捆绑包和 15 元普通档位。后续若确认某个倍率只适用某一档位，只需调整对应记录的 <code>offerIds</code>。</p>
   </section>
 
   <section class="method-grid" aria-label="计算公式">
@@ -45,7 +65,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
       <span class="formula-index">03</span>
       <h2>正式排名</h2>
       <p class="formula">按每元有效额度降序</p>
-      <p>计算时保留 JavaScript 数值的完整精度，再生成排名；表格中的两位小数只用于阅读。</p>
+      <p>GPT、Claude 等模型分别计算和生成排名，不跨模型合并名次；计算时保留 JavaScript 数值的完整精度，表格中的两位小数只用于阅读。</p>
     </article>
   </section>
 
@@ -55,7 +75,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
         <p class="eyebrow">WORKED EXAMPLE</p>
         <h2 id="example-title">计算示例</h2>
       </div>
-      <span class="result-count">{examplePlan?.name}</span>
+      <span class="result-count">{examplePlan?.stationName} · {examplePlan?.model} · {examplePlan?.channel} · {offerLabels[examplePlan?.offerKind ?? 'bundle']} · {examplePlan?.offerLabel}</span>
     </div>
     <div class="calculation-line">
       <div><span>有效额度</span><strong>{formatMetric(examplePlan?.effectiveAmount ?? 0)}</strong><small>1000 ÷ 1.2</small></div>
@@ -74,7 +94,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
     <dl class="rules-list">
       <div><dt>异常金额</dt><dd>充值金额小于等于 0 或不是有限数值的方案不会进入正式排名。</dd></div>
       <div><dt>异常倍率</dt><dd>倍率小于等于 0 或不是有限数值的方案不会进入正式排名，避免产生无穷或无意义结果。</dd></div>
-      <div><dt>状态</dt><dd>支持有效、已过期、待核验三种状态；已过期方案会保留在数据中并明确显示。</dd></div>
+      <div><dt>状态</dt><dd>支持有效、已过期、未知三种状态；已过期方案会保留在数据中，并在页面中明确显示。</dd></div>
       <div><dt>数据更新</dt><dd>当前数据集最近测评日期为 {formatDate(latestMeasuredDate)}；来源和备注随每条方案保存。</dd></div>
     </dl>
   </section>
@@ -82,6 +102,6 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
   <section class="disclaimer-section" aria-labelledby="disclaimer-title">
     <p class="eyebrow">DISCLAIMER</p>
     <h2 id="disclaimer-title">使用边界</h2>
-    <p>有效额度是对给定价格和倍率的机械换算，不等同于实际体验。模型可用性、限流、响应速度、上下文上限、余额有效期和服务稳定性都可能改变实际价值。数据来自公开记录或用户提交，尚未对每个方案逐项核验，请在使用前独立确认。</p>
+    <p>有效额度是对给定价格和倍率的机械换算，不等同于实际体验。模型可用性、限流、响应速度、上下文上限、余额有效期和服务稳定性都可能改变实际价值。数据由用户从官方网站人工采集，实际规则如有变化请以服务方最新说明为准。</p>
   </section>
 </BaseLayout>

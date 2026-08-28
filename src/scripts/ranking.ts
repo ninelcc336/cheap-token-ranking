@@ -1,32 +1,65 @@
 type SortKey = 'value' | 'effective' | 'recharge' | 'multiplier' | 'name';
 
 const searchInput = document.querySelector<HTMLInputElement>('#plan-search');
-const typeFilter = document.querySelector<HTMLSelectElement>('#type-filter');
+const channelFilter = document.querySelector<HTMLSelectElement>('#channel-filter');
 const sortSelect = document.querySelector<HTMLSelectElement>('#sort-select');
+const modelTabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-model-tab]'));
+const rankingPanel = document.querySelector<HTMLElement>('#ranking-panel');
+const rankingTitle = document.querySelector<HTMLElement>('#ranking-title');
 const tableBody = document.querySelector<HTMLTableSectionElement>('#table-body');
 const mobileList = document.querySelector<HTMLElement>('#mobile-list');
 const resultCount = document.querySelector<HTMLElement>('#result-count');
+const summaryCount = document.querySelector<HTMLElement>('#summary-count');
+const summaryTopValue = document.querySelector<HTMLElement>('#summary-top-value');
+const summaryNote = document.querySelector<HTMLElement>('#summary-note');
 const emptyState = document.querySelector<HTMLElement>('#empty-state');
 
 const getItems = (container: ParentNode | null): HTMLElement[] =>
   container ? Array.from(container.querySelectorAll<HTMLElement>('[data-plan-item]')) : [];
 
+/** 获取当前激活的模型；没有可用 Tab 时返回空字符串，让页面安全地显示空状态。 */
+function getActiveModel(): string {
+  return modelTabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.dataset.modelTab ?? '';
+}
+
+/** 根据当前模型的 DOM 数据重建渠道选项，避免切换模型后出现无效渠道。 */
+function updateChannelOptions(model: string): void {
+  if (!channelFilter) return;
+
+  const currentChannel = channelFilter.value;
+  const channels = [
+    ...new Set(
+      getItems(tableBody)
+        .filter((item) => item.dataset.model === model)
+        .map((item) => item.dataset.channel ?? '')
+        .filter(Boolean),
+    ),
+  ];
+  channelFilter.replaceChildren(new Option('全部渠道', 'all'), ...channels.map((channel) => new Option(channel, channel)));
+  channelFilter.value = channels.includes(currentChannel) ? currentChannel : 'all';
+}
+
 /**
- * 对桌面行和移动卡片执行相同的筛选、排序和可见性更新，保持两种布局的数据状态一致。
- * DOM 中保留服务端渲染内容，因此即使脚本不可用，静态页面仍然可以阅读。
+ * 对桌面行和移动卡片执行当前模型的搜索、渠道筛选、排序和可见性更新。
+ * 排名序号来自对应模型的构建时排名，切换模型不会与其他模型共享名次。
  */
 function updateRanking(): void {
   const query = searchInput?.value.trim().toLocaleLowerCase() ?? '';
-  const selectedType = typeFilter?.value ?? 'all';
+  const selectedModel = getActiveModel();
+  const selectedChannel = channelFilter?.value ?? 'all';
   const sortKey = (sortSelect?.value ?? 'value') as SortKey;
-  const allItems = [...getItems(tableBody), ...getItems(mobileList)];
   const tableItems = getItems(tableBody);
   const mobileItems = getItems(mobileList);
+  const allItems = [...tableItems, ...mobileItems];
 
   const matches = (item: HTMLElement): boolean => {
-    const name = item.dataset.name ?? '';
-    const type = item.dataset.type ?? '';
-    return (!query || name.includes(query)) && (selectedType === 'all' || type === selectedType);
+    const searchText = item.dataset.search ?? item.dataset.name ?? '';
+    const channel = item.dataset.channel ?? '';
+    return (
+      item.dataset.model === selectedModel &&
+      (!query || searchText.includes(query)) &&
+      (selectedChannel === 'all' || channel === selectedChannel)
+    );
   };
 
   const compare = (left: HTMLElement, right: HTMLElement): number => {
@@ -48,20 +81,30 @@ function updateRanking(): void {
 
   sortContainer(tableItems, tableBody);
   sortContainer(mobileItems, mobileList);
-  allItems.forEach((item) => {
-    item.setAttribute('aria-hidden', String(!matches(item)));
-  });
+  allItems.forEach((item) => item.setAttribute('aria-hidden', String(!matches(item))));
 
-  const visibleCount = visibleItems.length;
-  if (resultCount) {
-    resultCount.textContent = `显示 ${visibleCount} 个方案`;
-  }
-  if (emptyState) {
-    emptyState.hidden = visibleCount > 0;
-  }
+  const modelItems = tableItems.filter((item) => item.dataset.model === selectedModel);
+  const modelLabel = modelTabs.find((tab) => tab.dataset.modelTab === selectedModel)?.dataset.modelLabel ?? selectedModel;
+  const topValue = Math.max(...modelItems.map((item) => Number(item.dataset.value ?? 0)), 0);
+  if (rankingTitle) rankingTitle.textContent = `${modelLabel} 方案排名`;
+  if (resultCount) resultCount.textContent = `${modelLabel} 显示 ${visibleItems.length} 条记录`;
+  if (summaryCount) summaryCount.textContent = String(modelItems.length);
+  if (summaryTopValue) summaryTopValue.textContent = topValue.toFixed(2);
+  if (summaryNote) summaryNote.textContent = `当前显示 ${modelLabel}，模型独立排名；数据来自官方网站人工采集`;
+  if (emptyState) emptyState.hidden = visibleItems.length > 0;
 }
 
+/** 激活一个模型 Tab，同步无障碍状态、渠道选项和当前榜单内容。 */
+function activateModel(tab: HTMLButtonElement): void {
+  modelTabs.forEach((modelTab) => modelTab.setAttribute('aria-selected', String(modelTab === tab)));
+  rankingPanel?.setAttribute('aria-labelledby', tab.id);
+  updateChannelOptions(tab.dataset.modelTab ?? '');
+  updateRanking();
+}
+
+modelTabs.forEach((tab) => tab.addEventListener('click', () => activateModel(tab)));
 searchInput?.addEventListener('input', updateRanking);
-typeFilter?.addEventListener('change', updateRanking);
+channelFilter?.addEventListener('change', updateRanking);
 sortSelect?.addEventListener('change', updateRanking);
+updateChannelOptions(getActiveModel());
 updateRanking();
