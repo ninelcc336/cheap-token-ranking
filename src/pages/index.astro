@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  formatMetric,
+  getAvailableTypes,
+  getLatestMeasuredDate,
+  getRankedPlans,
+} from '../data/plans';
+
+const rankedPlans = getRankedPlans();
+const types = getAvailableTypes();
+const latestMeasuredDate = getLatestMeasuredDate();
+// 统一基础路径格式，确保普通项目仓库部署时的链接不会和路径片段粘连。
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const methodHref = `${base}method/`;
+
+const statusLabels = {
+  active: '有效',
+  expired: '已过期',
+  unknown: '待核验',
+} as const;
+
+const typeLabels = {
+  Token: 'Token',
+  Code: 'Code',
+  其他: '其他',
+} as const;
+
+const formatDate = (date: string) => date.replaceAll('-', '.');
+---
+
+<BaseLayout
+  title="Token 中转性价比榜"
+  description="按每元有效额度比较 Token 中转方案，提供可维护的价格、倍率与额度数据。"
+>
+  <section class="page-intro" aria-labelledby="page-title">
+    <div>
+      <p class="eyebrow">PRICE / VALUE INDEX</p>
+      <h1 id="page-title">Token 中转性价比榜</h1>
+      <p class="intro-copy">用同一套口径比较有效额度、充值金额与倍率，结果按每元有效额度排序。</p>
+    </div>
+    <div class="intro-meta">
+      <span class="meta-label">最近测评</span>
+      <strong>{formatDate(latestMeasuredDate)}</strong>
+      <a class="text-link" href={methodHref}>了解计算口径 <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="summary-strip" aria-label="榜单摘要">
+    <div class="summary-item">
+      <span>可排名方案</span>
+      <strong>{rankedPlans.length}</strong>
+    </div>
+    <div class="summary-item">
+      <span>最高每元有效额度</span>
+      <strong>{formatMetric(rankedPlans[0]?.valuePerYuan ?? 0)}</strong>
+    </div>
+    <div class="summary-item">
+      <span>数据更新</span>
+      <strong>{formatDate(latestMeasuredDate)}</strong>
+    </div>
+    <div class="summary-note">
+      <span class="status-dot status-dot--unknown" aria-hidden="true"></span>
+      当前初始数据均标记为待核验
+    </div>
+  </section>
+
+  <section class="ranking-section" aria-labelledby="ranking-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">COMPARISON TABLE</p>
+        <h2 id="ranking-title">方案排名</h2>
+      </div>
+      <span id="result-count" class="result-count">显示 {rankedPlans.length} 个方案</span>
+    </div>
+
+    <div class="toolbar" aria-label="榜单筛选工具">
+      <label class="search-field">
+        <span class="sr-only">搜索方案名称</span>
+        <span class="search-icon" aria-hidden="true"></span>
+        <input id="plan-search" type="search" placeholder="搜索方案名称" autocomplete="off" />
+      </label>
+      <label class="select-field">
+        <span class="field-label">类型</span>
+        <select id="type-filter">
+          <option value="all">全部类型</option>
+          {types.map((type) => <option value={type}>{typeLabels[type]}</option>)}
+        </select>
+      </label>
+      <label class="select-field select-field--sort">
+        <span class="field-label">排序</span>
+        <select id="sort-select">
+          <option value="value">性价比优先</option>
+          <option value="effective">有效额度</option>
+          <option value="recharge">充值金额</option>
+          <option value="multiplier">倍率</option>
+          <option value="name">名称</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="table-wrap">
+      <table class="ranking-table" id="ranking-table">
+        <colgroup>
+          <col class="col-rank" />
+          <col class="col-name" />
+          <col class="col-type" />
+          <col class="col-recharge" />
+          <col class="col-face" />
+          <col class="col-multiplier" />
+          <col class="col-effective" />
+          <col class="col-value" />
+          <col class="col-status" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">排名</th>
+            <th scope="col">方案</th>
+            <th scope="col">类型</th>
+            <th scope="col" class="numeric">充值 / 元</th>
+            <th scope="col" class="numeric">面值 / $</th>
+            <th scope="col" class="numeric">倍率</th>
+            <th scope="col" class="numeric">有效额度</th>
+            <th scope="col" class="numeric emphasis-head">每元有效额度</th>
+            <th scope="col">状态</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {rankedPlans.map((plan) => (
+            <tr
+              class:list={{ 'plan-row': true, 'is-expired': plan.status === 'expired' }}
+              data-plan-item
+              data-name={plan.name.toLowerCase()}
+              data-type={plan.type}
+              data-value={plan.valuePerYuan}
+              data-effective={plan.effectiveAmount}
+              data-recharge={plan.rechargeAmount}
+              data-multiplier={plan.multiplier}
+            >
+              <td class="rank-cell"><span class="rank-number">{plan.rank.toString().padStart(2, '0')}</span></td>
+              <td>
+                <div class="plan-name">{plan.name}</div>
+                <div class="plan-note">{plan.notes}</div>
+              </td>
+              <td><span class="type-label">{typeLabels[plan.type]}</span></td>
+              <td class="numeric">{formatMetric(plan.rechargeAmount)}</td>
+              <td class="numeric">{formatMetric(plan.faceValue)}</td>
+              <td class="numeric">{formatMetric(plan.multiplier)}×</td>
+              <td class="numeric">{formatMetric(plan.effectiveAmount)}</td>
+              <td class="numeric value-cell">{formatMetric(plan.valuePerYuan)}</td>
+              <td>
+                <span class:list={{ 'status-badge': true, [`status-badge--${plan.status}`]: true }}>
+                  <span class="status-dot" aria-hidden="true"></span>
+                  {statusLabels[plan.status]}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mobile-list" id="mobile-list" aria-label="方案卡片列表">
+      {rankedPlans.map((plan) => (
+        <article
+          class:list={{ 'plan-card': true, 'is-expired': plan.status === 'expired' }}
+          data-plan-item
+          data-name={plan.name.toLowerCase()}
+          data-type={plan.type}
+          data-value={plan.valuePerYuan}
+          data-effective={plan.effectiveAmount}
+          data-recharge={plan.rechargeAmount}
+          data-multiplier={plan.multiplier}
+        >
+          <div class="plan-card-head">
+            <div>
+              <span class="rank-number">{plan.rank.toString().padStart(2, '0')}</span>
+              <h3>{plan.name}</h3>
+            </div>
+            <span class:list={{ 'status-badge': true, [`status-badge--${plan.status}`]: true }}>
+              <span class="status-dot" aria-hidden="true"></span>
+              {statusLabels[plan.status]}
+            </span>
+          </div>
+          <div class="card-tags">
+            <span class="type-label">{typeLabels[plan.type]}</span>
+            <span>{plan.notes}</span>
+          </div>
+          <dl class="card-metrics">
+            <div><dt>充值</dt><dd>{formatMetric(plan.rechargeAmount)} 元</dd></div>
+            <div><dt>面值</dt><dd>{formatMetric(plan.faceValue)} $</dd></div>
+            <div><dt>倍率</dt><dd>{formatMetric(plan.multiplier)}×</dd></div>
+            <div><dt>有效额度</dt><dd>{formatMetric(plan.effectiveAmount)}</dd></div>
+          </dl>
+          <div class="card-value">
+            <span>每元有效额度</span>
+            <strong>{formatMetric(plan.valuePerYuan)}</strong>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="empty-state" id="empty-state" hidden>
+      <strong>没有匹配的方案</strong>
+      <span>请调整搜索词或筛选条件。</span>
+    </div>
+  </section>
+
+  <section class="source-band" aria-labelledby="source-title">
+    <div>
+      <p class="eyebrow">DATA NOTE</p>
+      <h2 id="source-title">数据来源与边界</h2>
+    </div>
+    <div class="source-copy">
+      <p>本页初始数据由用户提供，测评日期为 {formatDate(latestMeasuredDate)}，来源标记为“待核验”。金额、面值和倍率均按原始记录计算，未做汇率换算。</p>
+      <p>排行榜仅反映给定口径下的数值比较，不代表服务稳定性、可用模型、退款政策或长期有效性。购买前请以服务方最新说明为准。</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import '../scripts/ranking';
+</script>

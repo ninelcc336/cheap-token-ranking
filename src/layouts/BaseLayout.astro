@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+// Astro 的 BASE_URL 在项目仓库构建时可能没有尾斜杠，统一后再拼接页面和资源路径。
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const homeHref = base;
+const methodHref = `${base}method/`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5f7fa" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="header-inner">
+          <a class="brand" href={homeHref} aria-label="Token 中转性价比榜首页">
+            <span class="brand-mark" aria-hidden="true">CT</span>
+            <span class="brand-copy">
+              <strong>Cheap Token</strong>
+              <span>中转方案性价比榜</span>
+            </span>
+          </a>
+          <nav class="site-nav" aria-label="主导航">
+            <a href={homeHref}>排行榜</a>
+            <a href={methodHref}>计算方法</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="site-main">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Cheap Token · 面向比较，不构成购买建议</span>
+          <a href={methodHref}>查看计算口径</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
