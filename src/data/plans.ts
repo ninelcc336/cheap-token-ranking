@@ -89,7 +89,7 @@ const rateNotes = '官网倍率数据';
 export const stations: Station[] = [
   {
     id: 'token-bank',
-    name: 'token bank',
+    name: 'bank of token',
     website: 'https://api.boft.ai/',
   },
   {
