@@ -158,9 +158,9 @@ const methodHref = `${base}method/`;
             <col class="col-rank" />
             <col class="col-name" />
             <col class="col-channel" />
+            <col class="col-multiplier" />
             <col class="col-recharge" />
             <col class="col-face" />
-            <col class="col-multiplier" />
             <col class="col-effective" />
             <col class="col-value" />
             <col class="col-updated" />
@@ -170,9 +170,9 @@ const methodHref = `${base}method/`;
               <th scope="col">排名</th>
               <th scope="col">中转站</th>
               <th scope="col">渠道</th>
+              <th scope="col" class="numeric">倍率</th>
               <th scope="col" class="numeric">充值 / 元</th>
               <th scope="col" class="numeric">面值 / $</th>
-              <th scope="col" class="numeric">倍率</th>
               <th scope="col" class="numeric">有效额度</th>
               <th scope="col" class="numeric emphasis-head">每元有效额度</th>
               <th scope="col">更新时间</th>
@@ -209,9 +209,9 @@ const methodHref = `${base}method/`;
                   <span class={`channel-label ${getChannelClass(plan.channel)}`}>{plan.channel}</span>
                   {plan.status === 'expired' && <span class="expired-marker">{expiredLabel}</span>}
                 </td>
+                <td class="numeric">{formatMetric(plan.multiplier)}×</td>
                 <td class="numeric">{formatMetric(plan.rechargeAmount)}</td>
                 <td class="numeric">{formatMetric(plan.faceValue)}</td>
-                <td class="numeric">{formatMetric(plan.multiplier)}×</td>
                 <td class="numeric">{formatMetric(plan.effectiveAmount)}</td>
                 <td class="numeric value-cell">{formatMetric(plan.valuePerYuan)}</td>
                 <td><time class="updated-at" datetime={plan.measuredAt}>{formatDate(plan.measuredAt)}</time></td>
@@ -257,9 +257,9 @@ const methodHref = `${base}method/`;
               <span>{offerLabels[plan.offerKind]}{plan.offerLabel ? ` · ${plan.offerLabel}` : ''}</span>
             </div>
             <dl class="card-metrics">
+              <div><dt>倍率</dt><dd>{formatMetric(plan.multiplier)}×</dd></div>
               <div><dt>充值</dt><dd>{formatMetric(plan.rechargeAmount)} 元</dd></div>
               <div><dt>面值</dt><dd>{formatMetric(plan.faceValue)} $</dd></div>
-              <div><dt>倍率</dt><dd>{formatMetric(plan.multiplier)}×</dd></div>
               <div><dt>有效额度</dt><dd>{formatMetric(plan.effectiveAmount)}</dd></div>
             </dl>
             <div class="card-value">

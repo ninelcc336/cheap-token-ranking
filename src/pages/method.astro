@@ -45,7 +45,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
       <li><strong>模型倍率</strong><span><code>modelRates</code> 记录模型、渠道和倍率，并通过 <code>offerIds</code> 指定适用充值档位。</span></li>
       <li><strong>排名组合</strong><span>构建时把模型倍率和它引用的充值档位展开，随后计算有效额度和每元有效额度。</span></li>
     </ol>
-    <p class="structure-note">当前 Claude 参数没有单独注明充值档位，因此复用对应站点已有档位；codex for 的 kiro 会展开为 140 元特殊捆绑包和 15 元普通档位。后续若确认某个倍率只适用某一档位，只需调整对应记录的 <code>offerIds</code>。</p>
+    <p class="structure-note">当前 Claude、Grok 参数没有单独注明充值档位，因此复用对应站点已有档位；codex for 的 kiro 和 Grok 未知渠道会展开为 140 元特殊捆绑包和 15 元普通档位。后续若确认某个倍率只适用某一档位，只需调整对应记录的 <code>offerIds</code>。</p>
   </section>
 
   <section class="method-grid" aria-label="计算公式">
