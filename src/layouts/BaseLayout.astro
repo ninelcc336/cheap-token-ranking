@@ -20,9 +20,20 @@ const methodHref = `${base}method/`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f5f7fa" />
+    <meta name="theme-color" content="#f4f7fa" data-theme-color />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <title>{title}</title>
+    <script is:inline>
+      // 首屏先同步已保存或系统偏好的主题，避免页面加载时从亮色闪到暗色。
+      const themeStorageKey = 'cheap-token-theme';
+      try {
+        const savedTheme = window.localStorage.getItem(themeStorageKey);
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : systemTheme;
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
   </head>
   <body>
     <div class="site-shell">
@@ -38,6 +49,16 @@ const methodHref = `${base}method/`;
           <nav class="site-nav" aria-label="主导航">
             <a href={homeHref}>排行榜</a>
             <a href={methodHref}>计算方法</a>
+            <button
+              class="theme-toggle"
+              type="button"
+              data-theme-toggle
+              aria-pressed="false"
+              aria-label="切换到暗色主题"
+              title="切换到暗色主题"
+            >
+              <span class="theme-toggle-icon" data-theme-icon aria-hidden="true">☾</span>
+            </button>
           </nav>
         </div>
       </header>

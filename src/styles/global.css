@@ -1,27 +1,205 @@
+/*
+ * 采用 Open Design 的 Dashboard 体系：8px 节奏、清晰的数据层级和近中性的表面。
+ * 亮色保留排行榜的克制感，暗色使用近黑底、炭灰分隔线和高对比蓝色强调。
+ */
 :root {
-  --ink: #17212b;
-  --muted: #6d7782;
-  --soft-muted: #8e98a3;
-  --line: #dfe4e8;
-  --line-strong: #cbd2d8;
+  color-scheme: light;
+  --ink: #18212b;
+  --ink-soft: #334155;
+  --muted: #657384;
+  --soft-muted: #8b98a7;
+  --line: #dfe6ed;
+  --line-strong: #c9d4df;
   --paper: #ffffff;
-  --canvas: #f5f7f8;
-  --panel: #eef2f4;
-  --accent: #b45231;
-  --accent-dark: #863a24;
-  --accent-soft: #f7ebe6;
-  --green: #2e7658;
-  --green-soft: #e7f2ec;
-  --amber: #9a681c;
-  --amber-soft: #fbf1dc;
-  --red: #a24343;
-  --red-soft: #f8e8e8;
+  --canvas: #f4f7fa;
+  --panel: #edf3f8;
+  --panel-strong: #e6eef6;
+  --table-head: #f0f5f9;
+  --row-hover: #f7fbff;
+  --control-hover: #f2f7fb;
+  --accent: #0c5cab;
+  --accent-dark: #08457d;
+  --accent-soft: #e7f1fb;
+  --focus-ring: #3d93e6;
+  --green: #16805e;
+  --green-soft: #e2f5ed;
+  --amber: #a56610;
+  --amber-soft: #fff3dc;
+  --red: #b54747;
+  --red-soft: #fbeaea;
+  --shadow-soft: 0 10px 28px rgba(31, 58, 82, 0.07);
+  --tag-default-bg: #f1f3f4;
+  --tag-default-line: #d1d7db;
+  --tag-default-text: #5f6870;
+  --tag-blue-bg: #e7eefb;
+  --tag-blue-line: #b7caeb;
+  --tag-blue-text: #335a96;
+  --tag-violet-bg: #f3eafa;
+  --tag-violet-line: #d7c1ea;
+  --tag-violet-text: #704590;
+  --tag-green-bg: #e5f3ee;
+  --tag-green-line: #b4d7c7;
+  --tag-green-text: #2e7658;
+  --tag-orange-bg: #fff0e2;
+  --tag-orange-line: #efc39f;
+  --tag-orange-text: #9a5424;
+  --tag-yellow-bg: #fff5d9;
+  --tag-yellow-line: #ead28a;
+  --tag-yellow-text: #876614;
+  --tag-cyan-bg: #e4f4f6;
+  --tag-cyan-line: #acd9de;
+  --tag-cyan-text: #286d75;
+  --tag-red-bg: #fae9e8;
+  --tag-red-line: #e4b7b5;
+  --tag-red-text: #994747;
+  --tag-teal-bg: #e8f0ef;
+  --tag-teal-line: #b9d1cc;
+  --tag-teal-text: #38695f;
+  --tag-indigo-bg: #ececff;
+  --tag-indigo-line: #c6c6ea;
+  --tag-indigo-text: #56558e;
+  --tag-purple-bg: #f3ecfc;
+  --tag-purple-line: #d7c8eb;
+  --tag-purple-text: #725197;
+  --tag-lime-bg: #edf5df;
+  --tag-lime-line: #cfe0a9;
+  --tag-lime-text: #607b28;
   --max-width: 1240px;
   color: var(--ink);
   background: var(--canvas);
   font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   font-synthesis: none;
   line-height: 1.5;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #f3f6f9;
+  --ink-soft: #d2d9e1;
+  --muted: #9aa7b5;
+  --soft-muted: #73808d;
+  --line: #27313b;
+  --line-strong: #3a4652;
+  --paper: #11161c;
+  --canvas: #09090b;
+  --panel: #161c23;
+  --panel-strong: #1d2630;
+  --table-head: #131b23;
+  --row-hover: #17202a;
+  --control-hover: #1c2630;
+  --accent: #3e9af3;
+  --accent-dark: #75baff;
+  --accent-soft: #123252;
+  --focus-ring: #75baff;
+  --green: #34d399;
+  --green-soft: #103829;
+  --amber: #f5b941;
+  --amber-soft: #3a2c12;
+  --red: #f28b8b;
+  --red-soft: #3d2024;
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.24);
+  --tag-default-bg: #20262d;
+  --tag-default-line: #3b4650;
+  --tag-default-text: #b9c3cc;
+  --tag-blue-bg: #152a40;
+  --tag-blue-line: #315c80;
+  --tag-blue-text: #8fc5ff;
+  --tag-violet-bg: #2a1d39;
+  --tag-violet-line: #65448b;
+  --tag-violet-text: #d0a8ff;
+  --tag-green-bg: #122d25;
+  --tag-green-line: #2b6f59;
+  --tag-green-text: #83d9b4;
+  --tag-orange-bg: #352317;
+  --tag-orange-line: #875637;
+  --tag-orange-text: #f1b083;
+  --tag-yellow-bg: #342d13;
+  --tag-yellow-line: #786628;
+  --tag-yellow-text: #f3d676;
+  --tag-cyan-bg: #132d33;
+  --tag-cyan-line: #2b6570;
+  --tag-cyan-text: #8dd9e3;
+  --tag-red-bg: #351e24;
+  --tag-red-line: #78424a;
+  --tag-red-text: #f3a4ae;
+  --tag-teal-bg: #17302c;
+  --tag-teal-line: #3d7065;
+  --tag-teal-text: #a1d6c8;
+  --tag-indigo-bg: #252445;
+  --tag-indigo-line: #5d5b97;
+  --tag-indigo-text: #bdbdff;
+  --tag-purple-bg: #2d2440;
+  --tag-purple-line: #6c5697;
+  --tag-purple-text: #d0b7f4;
+  --tag-lime-bg: #26321c;
+  --tag-lime-line: #58713c;
+  --tag-lime-text: #c5e58c;
+}
+
+/* JS 关闭时仍让系统暗色偏好得到完整配色；手动选择亮色会显式覆盖它。 */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ink: #f3f6f9;
+    --ink-soft: #d2d9e1;
+    --muted: #9aa7b5;
+    --soft-muted: #73808d;
+    --line: #27313b;
+    --line-strong: #3a4652;
+    --paper: #11161c;
+    --canvas: #09090b;
+    --panel: #161c23;
+    --panel-strong: #1d2630;
+    --table-head: #131b23;
+    --row-hover: #17202a;
+    --control-hover: #1c2630;
+    --accent: #3e9af3;
+    --accent-dark: #75baff;
+    --accent-soft: #123252;
+    --focus-ring: #75baff;
+    --green: #34d399;
+    --green-soft: #103829;
+    --amber: #f5b941;
+    --amber-soft: #3a2c12;
+    --red: #f28b8b;
+    --red-soft: #3d2024;
+    --tag-default-bg: #20262d;
+    --tag-default-line: #3b4650;
+    --tag-default-text: #b9c3cc;
+    --tag-blue-bg: #152a40;
+    --tag-blue-line: #315c80;
+    --tag-blue-text: #8fc5ff;
+    --tag-violet-bg: #2a1d39;
+    --tag-violet-line: #65448b;
+    --tag-violet-text: #d0a8ff;
+    --tag-green-bg: #122d25;
+    --tag-green-line: #2b6f59;
+    --tag-green-text: #83d9b4;
+    --tag-orange-bg: #352317;
+    --tag-orange-line: #875637;
+    --tag-orange-text: #f1b083;
+    --tag-yellow-bg: #342d13;
+    --tag-yellow-line: #786628;
+    --tag-yellow-text: #f3d676;
+    --tag-cyan-bg: #132d33;
+    --tag-cyan-line: #2b6570;
+    --tag-cyan-text: #8dd9e3;
+    --tag-red-bg: #351e24;
+    --tag-red-line: #78424a;
+    --tag-red-text: #f3a4ae;
+    --tag-teal-bg: #17302c;
+    --tag-teal-line: #3d7065;
+    --tag-teal-text: #a1d6c8;
+    --tag-indigo-bg: #252445;
+    --tag-indigo-line: #5d5b97;
+    --tag-indigo-text: #bdbdff;
+    --tag-purple-bg: #2d2440;
+    --tag-purple-line: #6c5697;
+    --tag-purple-text: #d0b7f4;
+    --tag-lime-bg: #26321c;
+    --tag-lime-line: #58713c;
+    --tag-lime-text: #c5e58c;
+  }
 }
 
 * {
@@ -31,12 +209,15 @@
 html {
   min-width: 320px;
   scroll-behavior: smooth;
+  background: var(--canvas);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   background: var(--canvas);
+  color: var(--ink);
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 a {
@@ -58,6 +239,7 @@ select {
 .site-header {
   background: var(--paper);
   border-bottom: 1px solid var(--line);
+  transition: background-color 180ms ease, border-color 180ms ease;
 }
 
 .header-inner,
@@ -141,10 +323,39 @@ select {
 .text-link:focus-visible,
 .footer-inner a:focus-visible,
 .brand:focus-visible,
+.theme-toggle:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
+}
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  margin-left: 2px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--control-hover);
+  color: var(--accent-dark);
+}
+
+.theme-toggle-icon {
+  display: block;
+  font-size: 20px;
+  line-height: 1;
 }
 
 .site-main {
@@ -246,7 +457,9 @@ h3 {
 .summary-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(220px, 1.3fr);
+  background: var(--paper);
   border-bottom: 1px solid var(--line-strong);
+  transition: background-color 180ms ease, border-color 180ms ease;
 }
 
 .summary-item,
@@ -348,9 +561,12 @@ h3 {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: var(--paper);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .search-field {
@@ -367,6 +583,7 @@ h3 {
   background: var(--paper);
   color: var(--ink);
   font-size: 13px;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
 .search-field input {
@@ -422,12 +639,16 @@ h3 {
 .select-field select {
   padding: 0 30px 0 10px;
   appearance: auto;
+  accent-color: var(--accent);
 }
 
 .table-wrap {
   overflow-x: auto;
   background: var(--paper);
   border: 1px solid var(--line);
+  border-radius: 0 0 8px 8px;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .ranking-table {
@@ -450,7 +671,7 @@ h3 {
 
 .ranking-table th {
   padding: 15px 14px;
-  background: #f9fafb;
+  background: var(--table-head);
   border-bottom: 1px solid var(--line-strong);
   color: var(--muted);
   font-size: 11px;
@@ -472,7 +693,7 @@ h3 {
 }
 
 .ranking-table tbody tr:hover {
-  background: #fcfdfd;
+  background: var(--row-hover);
 }
 
 .numeric {
@@ -545,75 +766,75 @@ h3 {
 
 /* 渠道颜色只承担快速识别作用，未知渠道使用中性样式，避免依赖颜色才能阅读。 */
 .channel-label--default {
-  background: #f1f3f4;
-  border-color: #d1d7db;
-  color: #5f6870;
+  background: var(--tag-default-bg);
+  border-color: var(--tag-default-line);
+  color: var(--tag-default-text);
 }
 
 .channel-label--plus {
-  background: #e7eefb;
-  border-color: #b7caeb;
-  color: #335a96;
+  background: var(--tag-blue-bg);
+  border-color: var(--tag-blue-line);
+  color: var(--tag-blue-text);
 }
 
 .channel-label--pro {
-  background: #f3eafa;
-  border-color: #d7c1ea;
-  color: #704590;
+  background: var(--tag-violet-bg);
+  border-color: var(--tag-violet-line);
+  color: var(--tag-violet-text);
 }
 
 .channel-label--kiro {
-  background: #e5f3ee;
-  border-color: #b4d7c7;
-  color: #2e7658;
+  background: var(--tag-green-bg);
+  border-color: var(--tag-green-line);
+  color: var(--tag-green-text);
 }
 
 .channel-label--max {
-  background: #fff0e2;
-  border-color: #efc39f;
-  color: #9a5424;
+  background: var(--tag-orange-bg);
+  border-color: var(--tag-orange-line);
+  color: var(--tag-orange-text);
 }
 
 .channel-label--aws {
-  background: #fff5d9;
-  border-color: #ead28a;
-  color: #876614;
+  background: var(--tag-yellow-bg);
+  border-color: var(--tag-yellow-line);
+  color: var(--tag-yellow-text);
 }
 
 .channel-label--cursor {
-  background: #e4f4f6;
-  border-color: #acd9de;
-  color: #286d75;
+  background: var(--tag-cyan-bg);
+  border-color: var(--tag-cyan-line);
+  color: var(--tag-cyan-text);
 }
 
 .channel-label--max-stable {
-  background: #fae9e8;
-  border-color: #e4b7b5;
-  color: #994747;
+  background: var(--tag-red-bg);
+  border-color: var(--tag-red-line);
+  color: var(--tag-red-text);
 }
 
 .channel-label--1m-stable {
-  background: #e8f0ef;
-  border-color: #b9d1cc;
-  color: #38695f;
+  background: var(--tag-teal-bg);
+  border-color: var(--tag-teal-line);
+  color: var(--tag-teal-text);
 }
 
 .channel-label--1m {
-  background: #ececff;
-  border-color: #c6c6ea;
-  color: #56558e;
+  background: var(--tag-indigo-bg);
+  border-color: var(--tag-indigo-line);
+  color: var(--tag-indigo-text);
 }
 
 .channel-label--antigravity {
-  background: #f3ecfc;
-  border-color: #d7c8eb;
-  color: #725197;
+  background: var(--tag-purple-bg);
+  border-color: var(--tag-purple-line);
+  color: var(--tag-purple-text);
 }
 
 .channel-label--high-buffer {
-  background: #edf5df;
-  border-color: #cfe0a9;
-  color: #607b28;
+  background: var(--tag-lime-bg);
+  border-color: var(--tag-lime-line);
+  color: var(--tag-lime-text);
 }
 
 .updated-at {
@@ -658,6 +879,9 @@ h3 {
   background: var(--paper);
   border: 1px solid var(--line);
   color: var(--muted);
+  border-radius: 0 0 8px 8px;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
   text-align: center;
 }
 
@@ -738,6 +962,7 @@ h3 {
 .site-footer {
   border-top: 1px solid var(--line);
   background: var(--paper);
+  transition: background-color 180ms ease, border-color 180ms ease;
 }
 
 .footer-inner {
@@ -822,6 +1047,8 @@ h3 {
   align-content: center;
   border: 1px solid var(--line);
   background: var(--paper);
+  border-radius: 6px;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
 }
 
 .calculation-line span,
@@ -850,6 +1077,7 @@ h3 {
 .calculation-result {
   border-color: var(--accent) !important;
   background: var(--accent-soft) !important;
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .calculation-result strong {
@@ -1010,6 +1238,9 @@ h3 {
     padding: 18px;
     background: var(--paper);
     border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow-soft);
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease;
   }
 
   .plan-card-head {
