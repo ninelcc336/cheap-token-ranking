@@ -232,13 +232,13 @@ export const rechargeOffers: RechargeOffer[] = [
  * 没有额外说明的 Claude 倍率按对应站点的全部充值档位展开，适用范围可通过 offerIds 调整。
  */
 export const modelRates: ModelRate[] = [
-  // GPT 模型的原有 Plus / Pro 倍率。
+  // GPT 模型的原有 Plus / Pro 倍率；token-bank 渠道按最新口径更新。
   {
     id: 'gpt-token-bank-plus',
     stationId: 'token-bank',
     model: 'GPT',
     channel: 'Plus',
-    multiplier: 0.1,
+    multiplier: 0.12,
     offerIds: ['token-bank-1'],
     source: officialManualSource,
     measuredAt: initialMeasuredAt,
@@ -250,7 +250,7 @@ export const modelRates: ModelRate[] = [
     stationId: 'token-bank',
     model: 'GPT',
     channel: 'Pro',
-    multiplier: 0.2,
+    multiplier: 0.25,
     offerIds: ['token-bank-1'],
     source: officialManualSource,
     measuredAt: initialMeasuredAt,
@@ -480,7 +480,7 @@ export const modelRates: ModelRate[] = [
     stationId: 'token-bank',
     model: 'Claude',
     channel: 'kiro',
-    multiplier: 0.1,
+    multiplier: 0.12,
     offerIds: ['token-bank-1'],
     source: officialManualSource,
     measuredAt: initialMeasuredAt,
@@ -492,7 +492,7 @@ export const modelRates: ModelRate[] = [
     stationId: 'token-bank',
     model: 'Claude',
     channel: 'kiro',
-    multiplier: 0.25,
+    multiplier: 0.35,
     offerIds: ['token-bank-1'],
     source: officialManualSource,
     measuredAt: initialMeasuredAt,
@@ -675,7 +675,7 @@ export const modelRates: ModelRate[] = [
     stationId: 'token-bank',
     model: 'Grok',
     channel: 'Heavy',
-    multiplier: 0.15,
+    multiplier: 0.18,
     offerIds: ['token-bank-1'],
     source: officialManualSource,
     measuredAt: rightCodeMeasuredAt,
