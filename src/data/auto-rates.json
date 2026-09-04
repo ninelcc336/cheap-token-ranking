@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-04T16:00:23.242Z",
+  "generatedAt": "2026-09-04T16:06:31.729Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -102,44 +102,11 @@
       "status": "active"
     },
     {
-      "id": "auto-token-bank-gpt-gpt--image2-4",
-      "stationId": "token-bank",
-      "model": "GPT",
-      "channel": "[GPT] Image2",
-      "multiplier": 1,
-      "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-token-bank-gemini-gemini--pro-8",
       "stationId": "token-bank",
       "model": "Gemini",
       "channel": "[Gemini] Pro",
       "multiplier": 0.2,
-      "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-token-bank-gemini-gemini--aistudio-image-26",
-      "stationId": "token-bank",
-      "model": "Gemini",
-      "channel": "[Gemini] AiStudio Image",
-      "multiplier": 1,
-      "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-token-bank-gemini-gemini--adobe-image-92",
-      "stationId": "token-bank",
-      "model": "Gemini",
-      "channel": "[Gemini] Adobe Image",
-      "multiplier": 1,
       "source": "https://api.boft.ai/api/v1/groups/available",
       "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -190,17 +157,6 @@
       "status": "active"
     },
     {
-      "id": "auto-codex-for-gpt-生图-12",
-      "stationId": "codex-for",
-      "model": "GPT",
-      "channel": "生图",
-      "multiplier": 1.4,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-codex-for-gpt-codex混合分组-1",
       "stationId": "codex-for",
       "model": "GPT",
@@ -223,17 +179,6 @@
       "status": "active"
     },
     {
-      "id": "auto-ccvibe-gpt-codex-gpt-余额结算-gpt-images-16",
-      "stationId": "ccvibe",
-      "model": "GPT",
-      "channel": "Codex/Gpt 余额结算（gpt/images）",
-      "multiplier": 2,
-      "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-ccvibe-claude-claude-1m分组-21",
       "stationId": "ccvibe",
       "model": "Claude",
@@ -250,17 +195,6 @@
       "model": "Claude",
       "channel": "Claude 官方Max",
       "multiplier": 22,
-      "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-ccvibe-gpt-images2-4k-38",
-      "stationId": "ccvibe",
-      "model": "GPT",
-      "channel": "images2-4k",
-      "multiplier": 1,
       "source": "https://cc-vibe.com/api/v1/groups/available",
       "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -388,17 +322,6 @@
       "status": "active"
     },
     {
-      "id": "auto-galaxy-gpt-gpt-生图1-2k-34",
-      "stationId": "galaxy",
-      "model": "GPT",
-      "channel": "GPT[生图1/2k]",
-      "multiplier": 5,
-      "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-galaxy-gpt-gpt-企业-47",
       "stationId": "galaxy",
       "model": "GPT",
@@ -437,17 +360,6 @@
       "model": "GPT",
       "channel": "GPT[兜底]",
       "multiplier": 2,
-      "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-galaxy-gpt-gpt-生图4k-65",
-      "stationId": "galaxy",
-      "model": "GPT",
-      "channel": "GPT[生图4k]",
-      "multiplier": 10,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
       "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
