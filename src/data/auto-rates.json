@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-04T15:22:25.341Z",
+  "generatedAt": "2026-09-04T16:00:23.242Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -9,7 +9,7 @@
       "channel": "[GPT] Free",
       "multiplier": 0.09,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -20,7 +20,7 @@
       "channel": "[GPT] Plus",
       "multiplier": 0.12,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -31,7 +31,7 @@
       "channel": "[GPT] MIX",
       "multiplier": 0.16,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -42,7 +42,7 @@
       "channel": "[GPT] Pro",
       "multiplier": 0.25,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -53,7 +53,7 @@
       "channel": "[GPT] Hacker",
       "multiplier": 0.2,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -64,7 +64,7 @@
       "channel": "[Claude] Kiro(90缓)",
       "multiplier": 0.12,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -75,7 +75,7 @@
       "channel": "[Claude] Kiro(99缓)",
       "multiplier": 0.35,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -86,7 +86,7 @@
       "channel": "[Claude] CC MAX",
       "multiplier": 1,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -97,7 +97,7 @@
       "channel": "[GROK] SuperHeavy",
       "multiplier": 0.18,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -108,7 +108,7 @@
       "channel": "[GPT] Image2",
       "multiplier": 1,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -119,7 +119,7 @@
       "channel": "[Gemini] Pro",
       "multiplier": 0.2,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -130,7 +130,7 @@
       "channel": "[Gemini] AiStudio Image",
       "multiplier": 1,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -141,7 +141,7 @@
       "channel": "[Gemini] Adobe Image",
       "multiplier": 1,
       "source": "https://api.boft.ai/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -152,7 +152,7 @@
       "channel": "codex混合渠道--低价",
       "multiplier": 1.2,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -163,7 +163,7 @@
       "channel": "纯pro渠道",
       "multiplier": 1.4,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -174,18 +174,18 @@
       "channel": "claudecode逆向",
       "multiplier": 1.4,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
     {
-      "id": "auto-codex-for-gpt-grok-11",
+      "id": "auto-codex-for-grok-grok-11",
       "stationId": "codex-for",
-      "model": "GPT",
+      "model": "Grok",
       "channel": "grok",
       "multiplier": 1,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -196,7 +196,7 @@
       "channel": "生图",
       "multiplier": 1.4,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -207,7 +207,7 @@
       "channel": "codex混合分组",
       "multiplier": 1.2,
       "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -218,7 +218,7 @@
       "channel": "Claude 余额结算",
       "multiplier": 1,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -229,7 +229,7 @@
       "channel": "Codex/Gpt 余额结算（gpt/images）",
       "multiplier": 2,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -240,7 +240,7 @@
       "channel": "Claude-1M分组",
       "multiplier": 3,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -251,7 +251,7 @@
       "channel": "Claude 官方Max",
       "multiplier": 22,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -262,7 +262,7 @@
       "channel": "images2-4k",
       "multiplier": 1,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -273,7 +273,7 @@
       "channel": "GPT Pro（稳定）",
       "multiplier": 5,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -284,7 +284,7 @@
       "channel": "Claude 官方Max（稳定）",
       "multiplier": 28,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -295,7 +295,7 @@
       "channel": "Claude-1M（稳定）",
       "multiplier": 5,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -306,7 +306,7 @@
       "channel": "国产模型-Claude 协议",
       "multiplier": 8,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -317,18 +317,18 @@
       "channel": "国产模型-OpenAI 协议",
       "multiplier": 8,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
     {
-      "id": "auto-ccvibe-gpt-grok-openai协议-51",
+      "id": "auto-ccvibe-grok-grok-openai协议-51",
       "stationId": "ccvibe",
-      "model": "GPT",
+      "model": "Grok",
       "channel": "Grok Openai协议",
       "multiplier": 3,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -339,18 +339,18 @@
       "channel": "Amazon Bedrock（兼容）",
       "multiplier": 80,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
     {
-      "id": "auto-ccvibe-gpt-grok-视频-58",
+      "id": "auto-ccvibe-grok-grok-视频-58",
       "stationId": "ccvibe",
-      "model": "GPT",
+      "model": "Grok",
       "channel": "Grok 视频",
       "multiplier": 1,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -361,7 +361,7 @@
       "channel": "Google Vertex Al",
       "multiplier": 56,
       "source": "https://cc-vibe.com/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -372,7 +372,7 @@
       "channel": "GPT[主推]",
       "multiplier": 1,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -383,7 +383,7 @@
       "channel": "Claude [MAX]",
       "multiplier": 12,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -394,7 +394,7 @@
       "channel": "GPT[生图1/2k]",
       "multiplier": 5,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -405,7 +405,7 @@
       "channel": "GPT[企业]",
       "multiplier": 1.6,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -416,7 +416,7 @@
       "channel": "Claude[Kiro]",
       "multiplier": 1.3,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -427,7 +427,7 @@
       "channel": "GPT[特惠]",
       "multiplier": 0.75,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -438,7 +438,7 @@
       "channel": "GPT[兜底]",
       "multiplier": 2,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -449,7 +449,7 @@
       "channel": "GPT[生图4k]",
       "multiplier": 10,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -460,7 +460,7 @@
       "channel": "Grok",
       "multiplier": 0.5,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -471,7 +471,7 @@
       "channel": "GPT[不稳定]",
       "multiplier": 0.45,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -482,7 +482,7 @@
       "channel": "GPT - Luna 专用 - 测试中",
       "multiplier": 6,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -493,7 +493,7 @@
       "channel": "GPT - 无敌兜底",
       "multiplier": 2.4,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -504,7 +504,7 @@
       "channel": "Grok Heavy",
       "multiplier": 2,
       "source": "https://gpt.eacase.de5.net/api/v1/groups/available",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -515,7 +515,7 @@
       "channel": "未知",
       "multiplier": 0.1,
       "source": "https://www.rightapi.ai/upstreams/public",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -526,7 +526,7 @@
       "channel": "Gemini",
       "multiplier": 0.6,
       "source": "https://www.rightapi.ai/upstreams/public",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -537,7 +537,7 @@
       "channel": "aws",
       "multiplier": 0.3,
       "source": "https://www.rightapi.ai/upstreams/public",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -548,7 +548,7 @@
       "channel": "官方",
       "multiplier": 2,
       "source": "https://www.rightapi.ai/upstreams/public",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
@@ -559,7 +559,7 @@
       "channel": "Pro",
       "multiplier": 0.4,
       "source": "https://www.rightapi.ai/upstreams/public",
-      "measuredAt": "2026-09-04",
+      "measuredAt": "2026-09-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     }
