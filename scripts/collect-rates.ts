@@ -129,15 +129,21 @@ export function parseSub2ApiGroups(
   }
 
   const source = config.baseUrl + '/api/v1/groups/available';
+  const compiledNameRules = (config.nameModelRules ?? []).map((rule) => ({
+    ...rule,
+    expression: new RegExp(rule.match, 'i'),
+  }));
   const overrides: AutoRateOverride[] = [];
   data.forEach((item, index) => {
     if (!isRecord(item)) throw new Error('groups/available 包含非对象记录');
     const platform = String(item.platform ?? '').trim().toLowerCase();
-    const model = config.platformModelMap[platform];
-    if (!model) return;
-
     const channel = String(item.name ?? item.group_name ?? '').trim();
     if (!channel) throw new Error('分组记录缺少 name');
+    // 分组名规则优先于 platform：Grok 等模型常挂在 openai 协议分组下。
+    const nameModel = compiledNameRules.find((candidate) => candidate.expression.test(channel))?.model;
+    const model = nameModel ?? config.platformModelMap[platform];
+    if (!model) return;
+
     const multiplier = toPositiveNumber(item.rate_multiplier, '分组 ' + channel + ' 的 rate_multiplier');
     const sourceId = String(item.id ?? index);
     overrides.push(createOverride(config.stationId, model, channel, multiplier, sourceId, source, measuredAt));

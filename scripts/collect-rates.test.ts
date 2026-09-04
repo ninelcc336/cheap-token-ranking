@@ -65,6 +65,32 @@ test('Sub2API 分组响应会解包、映射模型并保留字符串倍率', () 
   assert.equal(rows[0]?.measuredAt, '2026-09-04');
 });
 
+test('分组名命中名称规则时优先于 platform 推断模型族', () => {
+  const rows = parseSub2ApiGroups(
+    {
+      code: 0,
+      data: [
+        { id: 1, name: 'grok', platform: 'openai', rate_multiplier: 1 },
+        { id: 2, name: 'Grok Openai协议', platform: 'openai', rate_multiplier: '3' },
+        { id: 3, name: 'Grok 视频', platform: 'openai', rate_multiplier: 1 },
+        { id: 4, name: '纯pro渠道', platform: 'openai', rate_multiplier: 1.4 },
+      ],
+    },
+    { ...sub2ApiConfig, nameModelRules: [{ match: 'grok', model: 'Grok' }] },
+    '2026-09-04',
+  );
+
+  assert.deepEqual(
+    rows.map((row) => [row.model, row.channel, row.multiplier]),
+    [
+      ['Grok', 'grok', 1],
+      ['Grok', 'Grok Openai协议', 3],
+      ['Grok', 'Grok 视频', 1],
+      ['GPT', '纯pro渠道', 1.4],
+    ],
+  );
+});
+
 test('异常倍率会阻止整个站点覆盖旧快照', () => {
   assert.throws(
     () =>

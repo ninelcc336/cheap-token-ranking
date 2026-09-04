@@ -6,6 +6,12 @@
  */
 import type { ModelFamily } from '../src/data/plans';
 
+export interface NameModelRule {
+  /** 对分组名做不区分大小写的正则匹配；命中时优先于 platform 映射推断模型族。 */
+  match: string;
+  model: ModelFamily;
+}
+
 export interface Sub2ApiSourceConfig {
   adapter: 'sub2api';
   stationId: string;
@@ -14,6 +20,8 @@ export interface Sub2ApiSourceConfig {
   tokenEnv: string;
   /** 将站点后端 platform 映射为本站的模型族；未配置的平台会被安全忽略。 */
   platformModelMap: Record<string, ModelFamily>;
+  /** 分组名规则：站点常把 Grok 等模型挂在 openai 协议下，名字比协议字段更能反映真实模型。 */
+  nameModelRules?: NameModelRule[];
 }
 
 export interface RightCodeRule {
@@ -57,6 +65,9 @@ const commonPlatformModelMap: Record<string, ModelFamily> = {
   gemini: 'Gemini',
 };
 
+/** 各 sub2api 站点共用的分组名模型规则；命中时优先于 platform 字段。 */
+const commonNameModelRules: NameModelRule[] = [{ match: 'grok', model: 'Grok' }];
+
 /** 当前仓库七个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
 export const rateSources: RateSourceConfig[] = [
   {
@@ -66,6 +77,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://api.boft.ai',
     tokenEnv: 'RATE_TOKEN_BANK',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'sub2api',
@@ -74,6 +86,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://api.259aitoken.com',
     tokenEnv: 'RATE_259AI',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'sub2api',
@@ -82,6 +95,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://blackaicoding.com',
     tokenEnv: 'RATE_CODEX_FOR',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'sub2api',
@@ -90,6 +104,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://app.pinaic.com',
     tokenEnv: 'RATE_PINAI',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'sub2api',
@@ -98,6 +113,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://cc-vibe.com',
     tokenEnv: 'RATE_CCVIBE',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'sub2api',
@@ -106,6 +122,7 @@ export const rateSources: RateSourceConfig[] = [
     baseUrl: 'https://gpt.eacase.de5.net',
     tokenEnv: 'RATE_GALAXY',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
   },
   {
     adapter: 'right-code',
