@@ -1,30 +1,41 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import autoRateSnapshotJson from './auto-rates.json' with { type: 'json' };
 import {
   calculatePlan,
   expandPlans,
   getAvailableChannels,
   getAvailableModels,
   getRankedPlans,
+  manualModelRates,
+  mergeAutoRateOverrides,
   modelRates,
   rechargeOffers,
   stations,
 } from './plans';
+import type { AutoRateSnapshot, ModelFamily } from './plans';
 
-test('三层数据目录会展开为正确数量的模型与充值组合', () => {
-  const expanded = expandPlans();
+const autoRateSnapshot = autoRateSnapshotJson as AutoRateSnapshot;
 
+/**
+ * 自动快照会随各站点分组实时变化，因此涉及快照内容的断言一律使用结构不变量；
+ * 固定数值断言全部针对人工维护的数据基线（manualModelRates），
+ * 保证自动采集刷新数据时测试不会失效。
+ */
+const manualExpanded = expandPlans(stations, rechargeOffers, manualModelRates);
+const baselineModels: ModelFamily[] = ['GPT', 'Claude', 'Grok'];
+
+test('人工维护的三层目录保持完整并展开为基础榜单', () => {
   assert.equal(stations.length, 7);
   assert.equal(rechargeOffers.length, 8);
-  assert.equal(modelRates.length, 42);
-  assert.equal(expanded.length, 46);
-  assert.deepEqual(getAvailableModels(), ['GPT', 'Claude', 'Grok']);
+  assert.equal(manualModelRates.length, 42);
+  assert.equal(manualExpanded.length, 46);
+  assert.deepEqual(getAvailableModels(manualModelRates), ['GPT', 'Claude', 'Grok']);
 });
 
-test('GPT 与 Claude 分别生成独立排名', () => {
-  const expanded = expandPlans();
-  const gptRanked = getRankedPlans('GPT', expanded);
-  const claudeRanked = getRankedPlans('Claude', expanded);
+test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
+  const gptRanked = getRankedPlans('GPT', manualExpanded);
+  const claudeRanked = getRankedPlans('Claude', manualExpanded);
   const ccvibeOneM = claudeRanked.find((plan) => plan.stationName === 'ccvibe' && plan.channel === '1M');
   const codexKiroBundle = claudeRanked.find(
     (plan) => plan.stationId === 'codex-for' && plan.channel === 'kiro' && plan.offerKind === 'bundle',
@@ -61,8 +72,8 @@ test('GPT 与 Claude 分别生成独立排名', () => {
   assert.equal(rightCodeClaudeAws?.valuePerYuan, 10 / 3);
 });
 
-test('Grok 倍率覆盖新旧站点并按充值档位展开', () => {
-  const grokRanked = getRankedPlans('Grok');
+test('Grok 倍率按人工基线覆盖新旧站点并按充值档位展开', () => {
+  const grokRanked = getRankedPlans('Grok', manualExpanded);
 
   assert.equal(grokRanked.length, 8);
   assert.ok(grokRanked.every((plan) => plan.model === 'Grok'));
@@ -70,12 +81,12 @@ test('Grok 倍率覆盖新旧站点并按充值档位展开', () => {
   assert.equal(grokRanked[0]?.channel, '未知');
   assert.equal(grokRanked[0]?.valuePerYuan, 1 / 0.1);
   assert.equal(grokRanked.filter((plan) => plan.stationId === 'codex-for').length, 2);
-  assert.deepEqual(getAvailableChannels(modelRates, 'Grok'), ['未知', 'Heavy', '官方']);
+  assert.deepEqual(getAvailableChannels(manualModelRates, 'Grok'), ['未知', 'Heavy', '官方']);
 });
 
-test('渠道筛选项按模型隔离', () => {
-  const gptChannels = getAvailableChannels(modelRates, 'GPT');
-  const claudeChannels = getAvailableChannels(modelRates, 'Claude');
+test('渠道筛选项按模型隔离（人工基线）', () => {
+  const gptChannels = getAvailableChannels(manualModelRates, 'GPT');
+  const claudeChannels = getAvailableChannels(manualModelRates, 'Claude');
 
   assert.deepEqual(gptChannels, ['Plus', 'Pro']);
   assert.deepEqual(claudeChannels, [
@@ -94,7 +105,7 @@ test('渠道筛选项按模型隔离', () => {
 });
 
 test('Claude 倍率目录完整保留用户提供的参数', () => {
-  const claudeRates = modelRates
+  const claudeRates = manualModelRates
     .filter((rate) => rate.model === 'Claude')
     .map((rate) => [rate.stationId, rate.channel, rate.multiplier]);
 
@@ -124,6 +135,59 @@ test('Claude 倍率目录完整保留用户提供的参数', () => {
   ]);
 });
 
+test('合并自动快照后榜单包含全部有效覆盖且展开无丢失', () => {
+  const expanded = expandPlans();
+  assert.equal(expanded.length, modelRates.reduce((sum, rate) => sum + rate.offerIds.length, 0));
+
+  // 快照里每条有效覆盖都必须出现在合并结果中，防止自动采集的数据被静默丢弃。
+  const validStations = new Set(stations.map((station) => station.id));
+  autoRateSnapshot.overrides.forEach((override) => {
+    if (!validStations.has(override.stationId) || !override.channel?.trim()) return;
+    if (!Number.isFinite(override.multiplier) || override.multiplier <= 0) return;
+    const collected = modelRates.some(
+      (rate) =>
+        rate.stationId === override.stationId &&
+        rate.model === override.model &&
+        rate.channel === override.channel &&
+        rate.multiplier === override.multiplier,
+    );
+    assert.ok(
+      collected,
+      '快照覆盖未进入榜单：' + override.stationId + ' ' + override.model + ' ' + override.channel,
+    );
+  });
+
+  // 自动数据只追加不删除：人工目录中的每个渠道都必须仍然存在于合并结果中。
+  manualModelRates.forEach((rate) => {
+    const retained = modelRates.some(
+      (merged) =>
+        merged.stationId === rate.stationId &&
+        merged.model === rate.model &&
+        merged.channel === rate.channel,
+    );
+    assert.ok(retained, '人工渠道被合并逻辑删除：' + rate.stationId + ' ' + rate.model + ' ' + rate.channel);
+  });
+
+  baselineModels.forEach((model) => {
+    assert.ok(getAvailableModels().includes(model));
+  });
+});
+
+test('快照中的 Gemini 覆盖会进入 Gemini 榜单', () => {
+  const geminiRanked = getRankedPlans('Gemini');
+  autoRateSnapshot.overrides
+    .filter((override) => override.model === 'Gemini')
+    .forEach((override) => {
+      const collected = geminiRanked.some(
+        (plan) =>
+          plan.stationId === override.stationId &&
+          plan.channel === override.channel &&
+          plan.multiplier === override.multiplier,
+      );
+      assert.ok(collected, 'Gemini 覆盖未进入榜单：' + override.stationId + ' ' + override.channel);
+    });
+});
+
 test('金额或倍率不合法的展开记录不参与排名', () => {
   const invalidPlan = { ...expandPlans()[0]!, rechargeAmount: 0 };
   const calculated = calculatePlan(invalidPlan);
@@ -140,4 +204,31 @@ test('非有限数值不会产生 Infinity 或 NaN 并进入排名', () => {
   assert.equal(calculated.isRankable, false);
   assert.equal(calculated.valuePerYuan, 0);
   assert.equal(getRankedPlans(invalidPlan.model, [invalidPlan]).length, 0);
+});
+
+test('自动倍率覆盖同一站点渠道但保留充值档位和稳定顺序', () => {
+  const merged = mergeAutoRateOverrides(modelRates, [
+    {
+      stationId: 'right-code',
+      model: 'GPT',
+      channel: 'Pro',
+      multiplier: 0.25,
+      source: '自动测试源',
+      measuredAt: '2026-09-04',
+      notes: '测试覆盖',
+    },
+  ]);
+  const matches = merged.filter(
+    (plan) => plan.stationId === 'right-code' && plan.model === 'GPT' && plan.channel === 'Pro',
+  );
+
+  assert.equal(matches.length, 1);
+  assert.equal(matches[0]?.multiplier, 0.25);
+  assert.deepEqual(matches[0]?.offerIds, ['right-code-1']);
+  assert.ok(
+    merged.indexOf(matches[0]!) <
+      merged.findIndex(
+        (plan) => plan.stationId === 'right-code' && plan.model === 'Claude' && plan.channel === '官方',
+      ),
+  );
 });

@@ -5,6 +5,7 @@ import {
   formatMetric,
   getAvailableChannels,
   getAvailableModels,
+  getDataSourceLabel,
   getLatestMeasuredDate,
   getRankedPlans,
   modelRates,
@@ -57,6 +58,7 @@ const activeModel = activeEntry?.model ?? 'GPT';
 const activePlans = activeEntry?.plans ?? [];
 const rankedPlans = modelEntries.flatMap(({ plans }) => plans);
 const latestMeasuredDate = getLatestMeasuredDate();
+const dataSourceLabel = getDataSourceLabel();
 // 统一基础路径格式，确保普通项目仓库部署时的链接不会和路径片段粘连。
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
@@ -95,7 +97,7 @@ const methodHref = `${base}method/`;
     </div>
     <div class="summary-note">
       <span class="source-dot" aria-hidden="true"></span>
-      <span id="summary-note">当前显示 {modelLabels[activeModel]}，模型独立排名；数据来自官方网站人工采集</span>
+      <span id="summary-note">当前显示 {modelLabels[activeModel]}，模型独立排名；{dataSourceLabel}</span>
     </div>
   </section>
 
@@ -126,7 +128,13 @@ const methodHref = `${base}method/`;
       ))}
     </div>
 
-    <div id="ranking-panel" class="ranking-panel" role="tabpanel" aria-labelledby="model-tab-0">
+    <div
+      id="ranking-panel"
+      class="ranking-panel"
+      role="tabpanel"
+      aria-labelledby="model-tab-0"
+      data-source-label={dataSourceLabel}
+    >
       <div class="toolbar" aria-label="榜单筛选工具">
         <label class="search-field">
           <span class="sr-only">搜索中转站或渠道</span>
@@ -283,7 +291,7 @@ const methodHref = `${base}method/`;
       <h2 id="source-title">数据来源与边界</h2>
     </div>
     <div class="source-copy">
-      <p>本页数据由用户从官方网站人工采集，测评日期为 {formatDate(latestMeasuredDate)}。金额、面值和倍率均按原始记录计算，未做汇率换算。</p>
+      <p>本页充值金额与美元面值仍由人工维护，倍率可由官网接口自动采集；当前来源为 {dataSourceLabel}，测评日期为 {formatDate(latestMeasuredDate)}。金额、面值和倍率均按原始记录计算，未做汇率换算。</p>
       <p>GPT、Claude 等模型使用各自独立的排名；榜单仅反映给定口径下的数值比较，不代表服务稳定性、可用模型、退款政策或长期有效性。购买前请以服务方最新说明为准。</p>
     </div>
   </section>

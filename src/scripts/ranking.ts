@@ -13,6 +13,7 @@ const summaryCount = document.querySelector<HTMLElement>('#summary-count');
 const summaryTopValue = document.querySelector<HTMLElement>('#summary-top-value');
 const summaryNote = document.querySelector<HTMLElement>('#summary-note');
 const emptyState = document.querySelector<HTMLElement>('#empty-state');
+const sourceLabel = rankingPanel?.dataset.sourceLabel ?? '官方网站人工采集';
 
 const getItems = (container: ParentNode | null): HTMLElement[] =>
   container ? Array.from(container.querySelectorAll<HTMLElement>('[data-plan-item]')) : [];
@@ -90,7 +91,7 @@ function updateRanking(): void {
   if (resultCount) resultCount.textContent = `${modelLabel} 显示 ${visibleItems.length} 条记录`;
   if (summaryCount) summaryCount.textContent = String(modelItems.length);
   if (summaryTopValue) summaryTopValue.textContent = topValue.toFixed(2);
-  if (summaryNote) summaryNote.textContent = `当前显示 ${modelLabel}，模型独立排名；数据来自官方网站人工采集`;
+  if (summaryNote) summaryNote.textContent = `当前显示 ${modelLabel}，模型独立排名；${sourceLabel}`;
   if (emptyState) emptyState.hidden = visibleItems.length > 0;
 }
 

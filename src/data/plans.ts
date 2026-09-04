@@ -1,3 +1,5 @@
+import autoRateSnapshotJson from './auto-rates.json' with { type: 'json' };
+
 export type PlanStatus = 'active' | 'expired' | 'unknown';
 
 export type OfferKind = 'standard' | 'bundle';
@@ -47,6 +49,26 @@ export interface ModelRate {
   measuredAt: string;
   notes: string;
   status: PlanStatus;
+}
+
+/** 自动采集器生成的倍率覆盖；充值档位仍从人工维护的 rechargeOffers 推导。 */
+export interface AutoRateOverride {
+  id?: string;
+  stationId: string;
+  model: ModelFamily;
+  channel: string;
+  multiplier: number;
+  offerIds?: string[];
+  source: string;
+  measuredAt: string;
+  notes: string;
+  status?: PlanStatus;
+}
+
+export interface AutoRateSnapshot {
+  schemaVersion: number;
+  generatedAt: string;
+  overrides: AutoRateOverride[];
 }
 
 export interface ExpandedPlan {
@@ -230,8 +252,9 @@ export const rechargeOffers: RechargeOffer[] = [
 /**
  * 模型倍率目录。GPT 是原有数据，Claude 是本次新增数据；每条记录只写倍率和适用档位。
  * 没有额外说明的 Claude 倍率按对应站点的全部充值档位展开，适用范围可通过 offerIds 调整。
+ * 导出仅供测试作为人工数据基线；页面与排名始终使用合并后的 modelRates。
  */
-export const modelRates: ModelRate[] = [
+export const manualModelRates: ModelRate[] = [
   // GPT 模型的原有 Plus / Pro 倍率；token-bank 渠道按最新口径更新。
   {
     id: 'gpt-token-bank-plus',
@@ -743,6 +766,128 @@ export const modelRates: ModelRate[] = [
     status: initialStatus,
   },
 ];
+
+const autoRateSnapshot = autoRateSnapshotJson as AutoRateSnapshot;
+
+function rateGroupKey(stationId: string, model: ModelFamily, channel: string): string {
+  return JSON.stringify([stationId, model, channel]);
+}
+
+function autoRateIdPart(value: string): string {
+  return (
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\p{L}\p{N}_-]+/gu, '-')
+      .replace(/^-+|-+$/g, '') || 'unknown'
+  );
+}
+
+/**
+ * 将自动快照按站点-模型-渠道覆盖人工倍率，同时复用原有充值档位。
+ * 未被成功采集的渠道不会被删除，避免某个账号权限变窄时把榜单数据静默清空。
+ */
+export function mergeAutoRateOverrides(
+  manualRates: ModelRate[],
+  overrides: AutoRateOverride[] = [],
+): ModelRate[] {
+  const stationIds = new Set(stations.map((station) => station.id));
+  const stationOfferIds = new Map<string, string[]>();
+  rechargeOffers.forEach((offer) => {
+    const ids = stationOfferIds.get(offer.stationId) ?? [];
+    ids.push(offer.id);
+    stationOfferIds.set(offer.stationId, ids);
+  });
+
+  const grouped = new Map<string, AutoRateOverride[]>();
+  overrides.forEach((override) => {
+    if (
+      !stationIds.has(override.stationId) ||
+      !override.channel?.trim() ||
+      !Number.isFinite(override.multiplier) ||
+      override.multiplier <= 0
+    ) {
+      return;
+    }
+    const key = rateGroupKey(override.stationId, override.model, override.channel);
+    const rows = grouped.get(key) ?? [];
+    rows.push(override);
+    grouped.set(key, rows);
+  });
+
+  if (grouped.size === 0) return manualRates;
+
+  const generatedByKey = new Map<string, ModelRate[]>();
+  grouped.forEach((rows, key) => {
+    const [stationId, model, channel] = JSON.parse(key) as [string, ModelFamily, string];
+    const fallbackOfferIds = [
+      ...new Set([
+        ...manualRates
+          .filter((rate) => rateGroupKey(rate.stationId, rate.model, rate.channel) === key)
+          .flatMap((rate) => rate.offerIds),
+        ...(stationOfferIds.get(stationId) ?? []),
+      ]),
+    ];
+
+    generatedByKey.set(
+      key,
+      rows.map((override, index) => {
+        const offerIds =
+          Array.isArray(override.offerIds) && override.offerIds.length > 0
+            ? override.offerIds
+            : fallbackOfferIds;
+        const status: PlanStatus =
+          override.status === 'expired' || override.status === 'unknown' ? override.status : 'active';
+        return {
+          id:
+            override.id?.trim() ||
+            ['auto', stationId, model.toLowerCase(), autoRateIdPart(channel), String(index + 1)].join('-'),
+          stationId,
+          model,
+          channel,
+          multiplier: override.multiplier,
+          offerIds,
+          source: override.source || '官方网站自动采集倍率',
+          measuredAt: override.measuredAt || '1970-01-01',
+          notes: override.notes || '自动倍率覆盖；充值档位仍由人工维护。',
+          status,
+        } satisfies ModelRate;
+      }),
+    );
+  });
+
+  // 替换时沿用人工目录的首次出现位置，让快照更新不改变现有数据的稳定顺序。
+  const merged: ModelRate[] = [];
+  const emittedKeys = new Set<string>();
+  manualRates.forEach((rate) => {
+    const key = rateGroupKey(rate.stationId, rate.model, rate.channel);
+    const generated = generatedByKey.get(key);
+    if (!generated) {
+      merged.push(rate);
+    } else if (!emittedKeys.has(key)) {
+      merged.push(...generated);
+      emittedKeys.add(key);
+    }
+  });
+  generatedByKey.forEach((generated, key) => {
+    if (!emittedKeys.has(key)) merged.push(...generated);
+  });
+  return merged;
+}
+
+/** 构建时读取自动快照；快照为空时完全回退到当前人工数据。 */
+const configuredAutoOverrides = Array.isArray(autoRateSnapshot.overrides)
+  ? autoRateSnapshot.overrides
+  : [];
+export const modelRates: ModelRate[] = mergeAutoRateOverrides(manualModelRates, configuredAutoOverrides);
+
+/** 给页面和说明页使用的来源摘要，避免自动更新后仍宣称全部数据来自人工采集。 */
+export function getDataSourceLabel(): string {
+  return configuredAutoOverrides.length > 0
+    ? '倍率由官网接口自动采集，充值档位由人工维护'
+    : '官方网站人工采集';
+}
 
 /** 合并多个原始记录的状态；已过期优先，其次是未知，只有全部有效时才返回 active。 */
 function resolveStatus(statuses: PlanStatus[]): PlanStatus {

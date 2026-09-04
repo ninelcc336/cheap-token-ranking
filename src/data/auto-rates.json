@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-04T14:16:28.825Z",
+  "overrides": [
+    {
+      "id": "auto-right-code-grok-未知-24",
+      "stationId": "right-code",
+      "model": "Grok",
+      "channel": "未知",
+      "multiplier": 0.1,
+      "source": "https://www.rightapi.ai/upstreams/public",
+      "measuredAt": "2026-09-04",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-right-code-gemini-gemini-6",
+      "stationId": "right-code",
+      "model": "Gemini",
+      "channel": "Gemini",
+      "multiplier": 0.6,
+      "source": "https://www.rightapi.ai/upstreams/public",
+      "measuredAt": "2026-09-04",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-right-code-claude-aws-5",
+      "stationId": "right-code",
+      "model": "Claude",
+      "channel": "aws",
+      "multiplier": 0.3,
+      "source": "https://www.rightapi.ai/upstreams/public",
+      "measuredAt": "2026-09-04",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-right-code-claude-官方-2",
+      "stationId": "right-code",
+      "model": "Claude",
+      "channel": "官方",
+      "multiplier": 2,
+      "source": "https://www.rightapi.ai/upstreams/public",
+      "measuredAt": "2026-09-04",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-right-code-gpt-pro-1",
+      "stationId": "right-code",
+      "model": "GPT",
+      "channel": "Pro",
+      "multiplier": 0.4,
+      "source": "https://www.rightapi.ai/upstreams/public",
+      "measuredAt": "2026-09-04",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    }
+  ]
+}
