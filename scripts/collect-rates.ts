@@ -133,12 +133,14 @@ export function parseSub2ApiGroups(
     ...rule,
     expression: new RegExp(rule.match, 'i'),
   }));
+  const excludePattern = config.excludeNamePattern ? new RegExp(config.excludeNamePattern, 'i') : null;
   const overrides: AutoRateOverride[] = [];
   data.forEach((item, index) => {
     if (!isRecord(item)) throw new Error('groups/available 包含非对象记录');
     const platform = String(item.platform ?? '').trim().toLowerCase();
     const channel = String(item.name ?? item.group_name ?? '').trim();
     if (!channel) throw new Error('分组记录缺少 name');
+    if (excludePattern && excludePattern.test(channel)) return;
     // 分组名规则优先于 platform：Grok 等模型常挂在 openai 协议分组下。
     const nameModel = compiledNameRules.find((candidate) => candidate.expression.test(channel))?.model;
     const model = nameModel ?? config.platformModelMap[platform];

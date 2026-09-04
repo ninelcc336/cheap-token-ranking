@@ -22,6 +22,8 @@ export interface Sub2ApiSourceConfig {
   platformModelMap: Record<string, ModelFamily>;
   /** 分组名规则：站点常把 Grok 等模型挂在 openai 协议下，名字比协议字段更能反映真实模型。 */
   nameModelRules?: NameModelRule[];
+  /** 命中该正则（不区分大小写）的分组一律不采集，用于排除生图等非文本模型渠道。 */
+  excludeNamePattern?: string;
 }
 
 export interface RightCodeRule {
@@ -68,6 +70,9 @@ const commonPlatformModelMap: Record<string, ModelFamily> = {
 /** 各 sub2api 站点共用的分组名模型规则；命中时优先于 platform 字段。 */
 const commonNameModelRules: NameModelRule[] = [{ match: 'grok', model: 'Grok' }];
 
+/** 各 sub2api 站点共用的分组排除表：生图、绘图等非文本模型渠道不进入榜单。 */
+const commonExcludeNamePattern = 'image|生图|绘图|画图|draw';
+
 /** 当前仓库七个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
 export const rateSources: RateSourceConfig[] = [
   {
@@ -78,6 +83,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_TOKEN_BANK',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'sub2api',
@@ -87,6 +93,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_259AI',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'sub2api',
@@ -96,6 +103,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_CODEX_FOR',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'sub2api',
@@ -105,6 +113,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_PINAI',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'sub2api',
@@ -114,6 +123,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_CCVIBE',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'sub2api',
@@ -123,6 +133,7 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_GALAXY',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
   },
   {
     adapter: 'right-code',

@@ -91,6 +91,24 @@ test('分组名命中名称规则时优先于 platform 推断模型族', () => {
   );
 });
 
+test('分组名命中排除表的生图渠道不会被采集', () => {
+  const rows = parseSub2ApiGroups(
+    {
+      code: 0,
+      data: [
+        { id: 1, name: '[GPT] Image2', platform: 'openai', rate_multiplier: 1 },
+        { id: 2, name: '生图', platform: 'openai', rate_multiplier: 1.4 },
+        { id: 3, name: 'GPT[生图4k]', platform: 'openai', rate_multiplier: 10 },
+        { id: 4, name: '[GPT] Plus', platform: 'openai', rate_multiplier: 0.12 },
+      ],
+    },
+    { ...sub2ApiConfig, excludeNamePattern: 'image|生图|绘图|画图|draw' },
+    '2026-09-04',
+  );
+
+  assert.deepEqual(rows.map((row) => [row.channel, row.multiplier]), [['[GPT] Plus', 0.12]]);
+});
+
 test('异常倍率会阻止整个站点覆盖旧快照', () => {
   assert.throws(
     () =>
