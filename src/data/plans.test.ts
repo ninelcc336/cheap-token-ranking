@@ -157,15 +157,30 @@ test('合并自动快照后榜单包含全部有效覆盖且展开无丢失', ()
     );
   });
 
-  // 自动数据只追加不删除：人工目录中的每个渠道都必须仍然存在于合并结果中。
+  // 站点级替换：已被自动采集接管的站点，榜单上只剩与快照一一对应的自动行；
+  // 未接管的站点人工数据必须原样保留。
+  const coveredStations = new Set<string>();
+  autoRateSnapshot.overrides.forEach((override) => {
+    if (!validStations.has(override.stationId) || !override.channel?.trim()) return;
+    if (!Number.isFinite(override.multiplier) || override.multiplier <= 0) return;
+    coveredStations.add(override.stationId);
+  });
+  coveredStations.forEach((stationId) => {
+    const snapshotRowCount = autoRateSnapshot.overrides.filter(
+      (override) => override.stationId === stationId,
+    ).length;
+    const mergedRowCount = modelRates.filter((rate) => rate.stationId === stationId).length;
+    assert.equal(mergedRowCount, snapshotRowCount, '站点 ' + stationId + ' 的榜单行数应与快照覆盖一一对应');
+  });
   manualModelRates.forEach((rate) => {
-    const retained = modelRates.some(
+    if (coveredStations.has(rate.stationId)) return;
+    const present = modelRates.some(
       (merged) =>
         merged.stationId === rate.stationId &&
         merged.model === rate.model &&
         merged.channel === rate.channel,
     );
-    assert.ok(retained, '人工渠道被合并逻辑删除：' + rate.stationId + ' ' + rate.model + ' ' + rate.channel);
+    assert.ok(present, '未采集站点的人工渠道被删除：' + rate.stationId + ' ' + rate.model + ' ' + rate.channel);
   });
 
   baselineModels.forEach((model) => {
@@ -206,8 +221,8 @@ test('非有限数值不会产生 Infinity 或 NaN 并进入排名', () => {
   assert.equal(getRankedPlans(invalidPlan.model, [invalidPlan]).length, 0);
 });
 
-test('自动倍率覆盖同一站点渠道但保留充值档位和稳定顺序', () => {
-  const merged = mergeAutoRateOverrides(modelRates, [
+test('自动采集接管站点后整体替换人工倍率并保留充值档位', () => {
+  const merged = mergeAutoRateOverrides(manualModelRates, [
     {
       stationId: 'right-code',
       model: 'GPT',
@@ -218,17 +233,15 @@ test('自动倍率覆盖同一站点渠道但保留充值档位和稳定顺序',
       notes: '测试覆盖',
     },
   ]);
-  const matches = merged.filter(
-    (plan) => plan.stationId === 'right-code' && plan.model === 'GPT' && plan.channel === 'Pro',
-  );
 
-  assert.equal(matches.length, 1);
-  assert.equal(matches[0]?.multiplier, 0.25);
-  assert.deepEqual(matches[0]?.offerIds, ['right-code-1']);
-  assert.ok(
-    merged.indexOf(matches[0]!) <
-      merged.findIndex(
-        (plan) => plan.stationId === 'right-code' && plan.model === 'Claude' && plan.channel === '官方',
-      ),
-  );
+  // 该站点其余人工渠道（包括快照未覆盖的特惠）一并移除，避免新旧渠道并存。
+  assert.ok(!merged.some((rate) => rate.stationId === 'right-code' && rate.channel === '特惠'));
+  const rightCodeRows = merged.filter((rate) => rate.stationId === 'right-code');
+  assert.equal(rightCodeRows.length, 1);
+  assert.equal(rightCodeRows[0]?.multiplier, 0.25);
+  assert.deepEqual(rightCodeRows[0]?.offerIds, ['right-code-1']);
+  // 42 条人工数据减去 right-code 的 5 条人工行，再加上 1 条自动行。
+  assert.equal(merged.length, 38);
+  // 未被自动采集的站点人工数据原样保留。
+  assert.ok(merged.some((rate) => rate.stationId === '259ai' && rate.channel === 'max'));
 });

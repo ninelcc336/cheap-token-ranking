@@ -785,8 +785,11 @@ function autoRateIdPart(value: string): string {
 }
 
 /**
- * 将自动快照按站点-模型-渠道覆盖人工倍率，同时复用原有充值档位。
- * 未被成功采集的渠道不会被删除，避免某个账号权限变窄时把榜单数据静默清空。
+ * 将自动快照合并进人工倍率目录。
+ * 只要某站点在快照中存在有效覆盖，就视为该站点已由自动采集接管：其全部人工
+ * 倍率行整体让位（含站点已改名或下架的旧渠道），避免同一渠道新旧名称并存；
+ * 快照未覆盖的站点原样保留人工行，作为采集失败或令牌缺失时的兜底。
+ * 充值档位（rechargeOffers）不受影响，自动行通过站点档位推导 offerIds。
  */
 export function mergeAutoRateOverrides(
   manualRates: ModelRate[],
@@ -801,6 +804,7 @@ export function mergeAutoRateOverrides(
   });
 
   const grouped = new Map<string, AutoRateOverride[]>();
+  const coveredStations = new Set<string>();
   overrides.forEach((override) => {
     if (
       !stationIds.has(override.stationId) ||
@@ -810,6 +814,7 @@ export function mergeAutoRateOverrides(
     ) {
       return;
     }
+    coveredStations.add(override.stationId);
     const key = rateGroupKey(override.stationId, override.model, override.channel);
     const rows = grouped.get(key) ?? [];
     rows.push(override);
@@ -857,21 +862,13 @@ export function mergeAutoRateOverrides(
     );
   });
 
-  // 替换时沿用人工目录的首次出现位置，让快照更新不改变现有数据的稳定顺序。
   const merged: ModelRate[] = [];
-  const emittedKeys = new Set<string>();
   manualRates.forEach((rate) => {
-    const key = rateGroupKey(rate.stationId, rate.model, rate.channel);
-    const generated = generatedByKey.get(key);
-    if (!generated) {
-      merged.push(rate);
-    } else if (!emittedKeys.has(key)) {
-      merged.push(...generated);
-      emittedKeys.add(key);
-    }
+    if (coveredStations.has(rate.stationId)) return;
+    merged.push(rate);
   });
-  generatedByKey.forEach((generated, key) => {
-    if (!emittedKeys.has(key)) merged.push(...generated);
+  generatedByKey.forEach((generated) => {
+    merged.push(...generated);
   });
   return merged;
 }

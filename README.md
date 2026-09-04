@@ -20,7 +20,7 @@ npm run preview # 本地预览构建产物
 
 ## 自动采集倍率
 
-仓库提供 scripts/collect-rates.ts 作为采集层，并把成功结果写入 src/data/auto-rates.json。页面构建时会用自动快照覆盖相同的站点-模型-渠道倍率，同时继续从 rechargeOffers 读取充值金额和美元面值，所以自动采集不会改写人工维护的充值档位。
+仓库提供 scripts/collect-rates.ts 作为采集层，并把成功结果写入 src/data/auto-rates.json。页面构建时，只要某站点在自动快照中有有效数据，该站点的人工倍率行就会整体让位于自动数据（包括站点已改名或下架的旧渠道），避免同一渠道新旧名称并存；快照中没有的站点继续使用人工维护的倍率。充值金额和美元面值始终从 rechargeOffers 读取，所以自动采集不会改写人工维护的充值档位。
 
 当前适配情况：
 
@@ -42,7 +42,7 @@ npm run preview # 本地预览构建产物
 
 - `stations`：维护中转站 `id`、名称和官网链接。页面中的中转站名称可直接跳转到对应官网。
 - `rechargeOffers`：维护站点的充值金额（人民币）、面值（美元）、`standard` / `bundle` 档位、数据来源、测评日期、备注和状态。
-- `modelRates`：维护模型族、渠道、倍率，以及适用充值档位的 `offerIds`；同一站点的多个模型可以复用同一个充值档位。
+- `modelRates`：维护模型族、渠道、倍率，以及适用充值档位的 `offerIds`；同一站点的多个模型可以复用同一个充值档位。已被自动采集接管的站点，其人工倍率行保留在源码中作为兜底，但不会出现在榜单上。
 
 构建时 `expandPlans()` 会根据 `stationId` 和 `offerIds` 展开为实际的站点-模型-充值组合，再计算排名。新增模型（如 Grok、Gemini）时，在 `modelRates` 增加对应记录即可；新增站点充值规则时，先增加 `rechargeOffers`，再在倍率记录中引用它。当前未单独提供充值档位的 Claude 参数，按该站点已有充值档位复用；例如 codex for 的 `kiro` 同时适用 140 元捆绑包和 15 元档位，如适用范围不同则只保留对应的 `offerIds`。
 
