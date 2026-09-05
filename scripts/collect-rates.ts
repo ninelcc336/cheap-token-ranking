@@ -13,6 +13,7 @@ import type { AutoRateOverride, ModelFamily } from '../src/data/plans';
 import {
   rateSources,
   type ManualRateSourceConfig,
+  type NewApiSourceConfig,
   type RateSourceConfig,
   type Sub2ApiSourceConfig,
 } from './rate-sources';
@@ -156,6 +157,66 @@ export function parseSub2ApiGroups(
   return overrides;
 }
 
+/**
+ * 解析 new-api 站点的 /api/pricing 响应。
+ * new-api 的倍率拆成模型基准价和分组倍率两层，其中分组倍率（group_ratio）与
+ * sub2api 的 rate_multiplier 语义一致——相对官方基准价的消耗倍数，因此直接作为
+ * 本站的 multiplier 采集；模型归属由模型名规则推断，同一分组覆盖多个模型族时
+ * 按模型族分别生成记录。按次计费分组不走倍率体系，无法和文本倍率比较，安全跳过。
+ */
+export function parseNewApiPricing(
+  payload: unknown,
+  config: NewApiSourceConfig,
+  measuredAt: string,
+): AutoRateOverride[] {
+  const data = unwrapResponse(payload);
+  if (!isRecord(data)) throw new Error('pricing 返回不是对象');
+  if (!isRecord(data.group_ratio)) throw new Error('pricing 缺少 group_ratio');
+  if (!Array.isArray(data.data)) throw new Error('pricing 缺少模型列表');
+
+  const groupRatio = new Map<string, number>();
+  Object.entries(data.group_ratio).forEach(([group, value]) => {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed) && parsed > 0) groupRatio.set(group, parsed);
+  });
+
+  const compiledNameRules = config.nameModelRules.map((rule) => ({
+    ...rule,
+    expression: new RegExp(rule.match, 'i'),
+  }));
+  const excludePattern = config.excludeNamePattern ? new RegExp(config.excludeNamePattern, 'i') : null;
+  const source = config.baseUrl + '/api/pricing';
+  const seen = new Map<string, AutoRateOverride>();
+
+  data.data.forEach((item) => {
+    if (!isRecord(item)) throw new Error('pricing 模型记录不是对象');
+    const modelName = String(item.model_name ?? '').trim();
+    if (!modelName) return;
+    const model = compiledNameRules.find((rule) => rule.expression.test(modelName))?.model;
+    if (!model) return;
+
+    const enableGroups = Array.isArray(item.enable_groups) ? item.enable_groups : [];
+    const billingModes = isRecord(item.group_billing_modes) ? item.group_billing_modes : {};
+    enableGroups.forEach((groupValue) => {
+      const channel = String(groupValue ?? '').trim();
+      if (!channel || (excludePattern && excludePattern.test(channel))) return;
+      if (billingModes[channel] === 'per_request') return;
+      const multiplier = groupRatio.get(channel);
+      if (!multiplier) return;
+
+      const key = model + '\n' + channel;
+      if (!seen.has(key)) {
+        seen.set(key, createOverride(config.stationId, model, channel, multiplier, channel, source, measuredAt));
+      }
+    });
+  });
+
+  if (seen.size === 0) {
+    throw new Error('没有识别到可定价的文本模型分组，拒绝覆盖旧数据');
+  }
+  return [...seen.values()];
+}
+
 async function requestJson(url: string, token?: string): Promise<unknown> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), requestTimeoutMs);
@@ -204,25 +265,32 @@ export async function collectSource(
   }
 
   try {
-    const token = process.env[config.tokenEnv]?.trim();
-    if (!token) {
-      return {
-        stationId: config.stationId,
-        name: config.name,
-        status: 'skipped',
-        overrides: [],
-        message: '未配置环境变量 ' + config.tokenEnv,
-      };
+    let token: string | undefined;
+    if (config.adapter === 'sub2api') {
+      token = process.env[config.tokenEnv]?.trim();
+      if (!token) {
+        return {
+          stationId: config.stationId,
+          name: config.name,
+          status: 'skipped',
+          overrides: [],
+          message: '未配置环境变量 ' + config.tokenEnv,
+        };
+      }
+    } else if (config.tokenEnv) {
+      token = process.env[config.tokenEnv]?.trim() || undefined;
     }
-    const payload = await requestJson(
-      normalizedBaseUrl(config.baseUrl) + '/api/v1/groups/available',
-      token,
-    );
+
+    const endpointPath = config.adapter === 'sub2api' ? '/api/v1/groups/available' : '/api/pricing';
+    const payload = await requestJson(normalizedBaseUrl(config.baseUrl) + endpointPath, token);
     return {
       stationId: config.stationId,
       name: config.name,
       status: 'success',
-      overrides: parseSub2ApiGroups(payload, config, measuredAt),
+      overrides:
+        config.adapter === 'sub2api'
+          ? parseSub2ApiGroups(payload, config, measuredAt)
+          : parseNewApiPricing(payload, config, measuredAt),
     };
   } catch (error) {
     return {

@@ -33,7 +33,20 @@ export interface ManualRateSourceConfig {
   reason: string;
 }
 
-export type RateSourceConfig = Sub2ApiSourceConfig | ManualRateSourceConfig;
+export interface NewApiSourceConfig {
+  adapter: 'new-api';
+  stationId: string;
+  name: string;
+  baseUrl: string;
+  /** new-api 的 /api/pricing 通常公开可读；配置了 tokenEnv 且环境变量存在时才携带令牌。 */
+  tokenEnv?: string;
+  /** 模型名规则：按顺序匹配 model_name 推断模型族，未命中的模型安全忽略。 */
+  nameModelRules: NameModelRule[];
+  /** 命中该正则（不区分大小写）的分组一律不采集，用于排除生图等非文本模型渠道。 */
+  excludeNamePattern?: string;
+}
+
+export type RateSourceConfig = Sub2ApiSourceConfig | ManualRateSourceConfig | NewApiSourceConfig;
 
 const commonPlatformModelMap: Record<string, ModelFamily> = {
   openai: 'GPT',
@@ -48,7 +61,18 @@ const commonNameModelRules: NameModelRule[] = [{ match: 'grok', model: 'Grok' }]
 /** 各 sub2api 站点共用的分组排除表：生图、绘图等非文本模型渠道不进入榜单。 */
 const commonExcludeNamePattern = 'image|生图|绘图|画图|draw';
 
-/** 当前仓库五个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
+/**
+ * new-api 站点按模型名推断模型族的规则；按顺序匹配，命中即停。
+ * gpt 规则放最后，避免 claude/grok/gemini 命名变体被提前误判。
+ */
+const commonNewApiNameModelRules: NameModelRule[] = [
+  { match: 'claude', model: 'Claude' },
+  { match: 'grok', model: 'Grok' },
+  { match: 'gemini', model: 'Gemini' },
+  { match: 'gpt|codex|o[0-9]', model: 'GPT' },
+];
+
+/** 当前仓库七个站点的采集配置；sub2api 站点全部接入令牌采集，new-api 站点走公开定价接口。 */
 export const rateSources: RateSourceConfig[] = [
   {
     adapter: 'sub2api',
@@ -98,6 +122,24 @@ export const rateSources: RateSourceConfig[] = [
     tokenEnv: 'RATE_GALAXY',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
+  },
+  {
+    adapter: 'sub2api',
+    stationId: 'didi-hub',
+    name: 'Didi Hub',
+    baseUrl: 'https://didisubapi.com',
+    tokenEnv: 'RATE_DIDI',
+    platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
+    nameModelRules: commonNameModelRules,
+    excludeNamePattern: commonExcludeNamePattern,
+  },
+  {
+    adapter: 'new-api',
+    stationId: 'maoai',
+    name: '猫艾',
+    baseUrl: 'https://api.maoapi.org',
+    nameModelRules: commonNewApiNameModelRules,
     excludeNamePattern: commonExcludeNamePattern,
   },
 ];

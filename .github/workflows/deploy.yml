@@ -40,6 +40,7 @@ jobs:
           RATE_PINAI: ${{ secrets.RATE_PINAI }}
           RATE_CCVIBE: ${{ secrets.RATE_CCVIBE }}
           RATE_GALAXY: ${{ secrets.RATE_GALAXY }}
+          RATE_DIDI: ${{ secrets.RATE_DIDI }}
 
       - name: Run data tests
         run: npm test

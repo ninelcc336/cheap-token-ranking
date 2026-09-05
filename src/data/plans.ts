@@ -99,6 +99,7 @@ export interface CalculatedPlan extends ExpandedPlan {
 const initialMeasuredAt = '2026-08-28';
 const galaxyMeasuredAt = '2026-08-29';
 const grokMeasuredAt = '2026-08-29';
+const newStationMeasuredAt = '2026-09-05';
 const officialManualSource = '官方网站人工采集';
 const initialStatus: PlanStatus = 'active';
 const standardOfferNotes = '官网充值档位';
@@ -133,6 +134,16 @@ export const stations: Station[] = [
     id: 'galaxy',
     name: 'Galaxy',
     website: 'https://gpt.eacase.de5.net/',
+  },
+  {
+    id: 'didi-hub',
+    name: 'Didi Hub',
+    website: 'https://didisubapi.com/',
+  },
+  {
+    id: 'maoai',
+    name: '猫艾',
+    website: 'https://api.maoapi.org/',
   },
 ];
 
@@ -210,6 +221,30 @@ export const rechargeOffers: RechargeOffer[] = [
     faceValue: 10,
     source: officialManualSource,
     measuredAt: galaxyMeasuredAt,
+    notes: standardOfferNotes,
+    status: initialStatus,
+  },
+  {
+    id: 'didi-hub-1',
+    stationId: 'didi-hub',
+    offerKind: 'standard',
+    offerLabel: '1 元档',
+    rechargeAmount: 1,
+    faceValue: 1,
+    source: officialManualSource,
+    measuredAt: newStationMeasuredAt,
+    notes: standardOfferNotes,
+    status: initialStatus,
+  },
+  {
+    id: 'maoai-1',
+    stationId: 'maoai',
+    offerKind: 'standard',
+    offerLabel: '1 元档',
+    rechargeAmount: 1,
+    faceValue: 1,
+    source: officialManualSource,
+    measuredAt: newStationMeasuredAt,
     notes: standardOfferNotes,
     status: initialStatus,
   },

@@ -26,8 +26,8 @@ const manualExpanded = expandPlans(stations, rechargeOffers, manualModelRates);
 const baselineModels: ModelFamily[] = ['GPT', 'Claude', 'Grok'];
 
 test('人工维护的三层目录保持完整并展开为基础榜单', () => {
-  assert.equal(stations.length, 5);
-  assert.equal(rechargeOffers.length, 6);
+  assert.equal(stations.length, 7);
+  assert.equal(rechargeOffers.length, 8);
   assert.equal(manualModelRates.length, 30);
   assert.equal(manualExpanded.length, 34);
   assert.deepEqual(getAvailableModels(manualModelRates), ['GPT', 'Claude', 'Grok']);
