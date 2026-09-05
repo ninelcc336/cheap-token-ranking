@@ -73,7 +73,7 @@ const commonNameModelRules: NameModelRule[] = [{ match: 'grok', model: 'Grok' }]
 /** 各 sub2api 站点共用的分组排除表：生图、绘图等非文本模型渠道不进入榜单。 */
 const commonExcludeNamePattern = 'image|生图|绘图|画图|draw';
 
-/** 当前仓库七个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
+/** 当前仓库六个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
 export const rateSources: RateSourceConfig[] = [
   {
     adapter: 'sub2api',
@@ -81,16 +81,6 @@ export const rateSources: RateSourceConfig[] = [
     name: 'bank of token',
     baseUrl: 'https://api.boft.ai',
     tokenEnv: 'RATE_TOKEN_BANK',
-    platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
-    nameModelRules: commonNameModelRules,
-    excludeNamePattern: commonExcludeNamePattern,
-  },
-  {
-    adapter: 'sub2api',
-    stationId: '259ai',
-    name: '259AI',
-    baseUrl: 'https://api.259aitoken.com',
-    tokenEnv: 'RATE_259AI',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
     excludeNamePattern: commonExcludeNamePattern,

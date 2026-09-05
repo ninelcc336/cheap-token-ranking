@@ -36,7 +36,6 @@ jobs:
         run: npm run collect-rates
         env:
           RATE_TOKEN_BANK: ${{ secrets.RATE_TOKEN_BANK }}
-          RATE_259AI: ${{ secrets.RATE_259AI }}
           RATE_CODEX_FOR: ${{ secrets.RATE_CODEX_FOR }}
           RATE_PINAI: ${{ secrets.RATE_PINAI }}
           RATE_CCVIBE: ${{ secrets.RATE_CCVIBE }}
