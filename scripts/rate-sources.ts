@@ -72,7 +72,7 @@ const commonNewApiNameModelRules: NameModelRule[] = [
   { match: 'gpt|codex|o[0-9]', model: 'GPT' },
 ];
 
-/** 当前仓库七个站点的采集配置；sub2api 站点全部接入令牌采集，new-api 站点走公开定价接口。 */
+/** 当前仓库六个站点的采集配置；sub2api 站点全部接入令牌采集，new-api 站点走公开定价接口。 */
 export const rateSources: RateSourceConfig[] = [
   {
     adapter: 'sub2api',
@@ -80,16 +80,6 @@ export const rateSources: RateSourceConfig[] = [
     name: 'bank of token',
     baseUrl: 'https://api.boft.ai',
     tokenEnv: 'RATE_TOKEN_BANK',
-    platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
-    nameModelRules: commonNameModelRules,
-    excludeNamePattern: commonExcludeNamePattern,
-  },
-  {
-    adapter: 'sub2api',
-    stationId: 'codex-for',
-    name: 'codex for',
-    baseUrl: 'https://blackaicoding.com',
-    tokenEnv: 'RATE_CODEX_FOR',
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
     excludeNamePattern: commonExcludeNamePattern,

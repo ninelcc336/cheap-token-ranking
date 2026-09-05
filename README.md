@@ -24,7 +24,7 @@ npm run preview # 本地预览构建产物
 
 当前适配情况：
 
-- bank of token、codex for、pinai、ccvibe、Galaxy、Didi Hub：读取登录后可见的 /api/v1/groups/available，需要对应站点账号令牌。分组名称不拘泥于 Plus、Pro 等固定叫法，接口返回的分组名会原样作为渠道进入榜单；模型归属默认由接口的 platform 字段决定，但分组名命中名称规则时以名称优先（例如 Grok 分组常挂在 openai 协议下）。名字命中排除表的生图、绘图类渠道不会采集。
+- bank of token、pinai、ccvibe、Galaxy、Didi Hub：读取登录后可见的 /api/v1/groups/available，需要对应站点账号令牌。分组名称不拘泥于 Plus、Pro 等固定叫法，接口返回的分组名会原样作为渠道进入榜单；模型归属默认由接口的 platform 字段决定，但分组名命中名称规则时以名称优先（例如 Grok 分组常挂在 openai 协议下）。名字命中排除表的生图、绘图类渠道不会采集。
 - 猫艾：new-api 平台，读取公开的 /api/pricing，不需要令牌。接口的分组倍率（group_ratio）语义与 sub2api 的倍率一致，直接进入榜单；模型归属由模型名规则推断，同一分组覆盖多个模型族时按模型族分别生成记录；按次计费分组（如论次收费的 gemini cli）不走倍率体系，不会采集。
 
 本地运行时，把登录后浏览器存储中的站点令牌放入环境变量，再执行采集。PowerShell 示例：
@@ -32,7 +32,7 @@ npm run preview # 本地预览构建产物
     $env:RATE_TOKEN_BANK = '只在当前进程使用的令牌'
     npm run collect-rates
 
-令牌不要写入仓库、日志或源码。部署到 GitHub 后，在仓库 Settings → Secrets and variables → Actions 中创建 RATE_TOKEN_BANK、RATE_CODEX_FOR、RATE_PINAI、RATE_CCVIBE、RATE_GALAXY、RATE_DIDI，工作流会自动读取它们。建议为采集专门注册低权限账号，并按站点规则定期轮换令牌。
+令牌不要写入仓库、日志或源码。部署到 GitHub 后，在仓库 Settings → Secrets and variables → Actions 中创建 RATE_TOKEN_BANK、RATE_PINAI、RATE_CCVIBE、RATE_GALAXY、RATE_DIDI，工作流会自动读取它们。建议为采集专门注册低权限账号，并按站点规则定期轮换令牌。
 
 .github/workflows/deploy.yml 已配置每 30 分钟运行一次，并提供手动触发入口。GitHub Actions 的定时任务不是严格实时系统，实际启动时间可能因队列延迟而推迟；它更适合分钟级或小时级刷新。采集失败、令牌缺失或响应结构异常时只会告警并保留旧快照，不会用空数据覆盖榜单。
 
@@ -44,7 +44,7 @@ npm run preview # 本地预览构建产物
 - `rechargeOffers`：维护站点的充值金额（人民币）、面值（美元）、`standard` / `bundle` 档位、数据来源、测评日期、备注和状态。
 - `modelRates`：维护模型族、渠道、倍率，以及适用充值档位的 `offerIds`；同一站点的多个模型可以复用同一个充值档位。已被自动采集接管的站点，其人工倍率行保留在源码中作为兜底，但不会出现在榜单上。
 
-构建时 `expandPlans()` 会根据 `stationId` 和 `offerIds` 展开为实际的站点-模型-充值组合，再计算排名。新增模型（如 Grok、Gemini）时，在 `modelRates` 增加对应记录即可；新增站点充值规则时，先增加 `rechargeOffers`，再在倍率记录中引用它。当前未单独提供充值档位的 Claude 参数，按该站点已有充值档位复用；例如 codex for 的 `kiro` 同时适用 140 元捆绑包和 15 元档位，如适用范围不同则只保留对应的 `offerIds`。
+构建时 `expandPlans()` 会根据 `stationId` 和 `offerIds` 展开为实际的站点-模型-充值组合，再计算排名。新增模型（如 Grok、Gemini）时，在 `modelRates` 增加对应记录即可；新增站点充值规则时，先增加 `rechargeOffers`，再在倍率记录中引用它。当前未单独提供充值档位的 Claude 参数，按该站点已有充值档位复用；如某个倍率只适用部分档位，则只保留对应的 `offerIds`。
 
 首页通过模型 Tab 分开展示榜单。GPT、Claude 等模型各自按每元有效额度独立排名，排名序号不会跨模型合并；Tab 内的渠道筛选只显示当前模型实际存在的渠道。
 

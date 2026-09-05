@@ -26,10 +26,10 @@ const manualExpanded = expandPlans(stations, rechargeOffers, manualModelRates);
 const baselineModels: ModelFamily[] = ['GPT', 'Claude', 'Grok'];
 
 test('人工维护的三层目录保持完整并展开为基础榜单', () => {
-  assert.equal(stations.length, 7);
-  assert.equal(rechargeOffers.length, 8);
-  assert.equal(manualModelRates.length, 30);
-  assert.equal(manualExpanded.length, 34);
+  assert.equal(stations.length, 6);
+  assert.equal(rechargeOffers.length, 6);
+  assert.equal(manualModelRates.length, 26);
+  assert.equal(manualExpanded.length, 26);
   assert.deepEqual(getAvailableModels(manualModelRates), ['GPT', 'Claude', 'Grok']);
 });
 
@@ -37,12 +37,9 @@ test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
   const gptRanked = getRankedPlans('GPT', manualExpanded);
   const claudeRanked = getRankedPlans('Claude', manualExpanded);
   const ccvibeOneM = claudeRanked.find((plan) => plan.stationName === 'ccvibe' && plan.channel === '1M');
-  const codexKiroBundle = claudeRanked.find(
-    (plan) => plan.stationId === 'codex-for' && plan.channel === 'kiro' && plan.offerKind === 'bundle',
-  );
 
-  assert.equal(gptRanked.length, 12);
-  assert.equal(claudeRanked.length, 16);
+  assert.equal(gptRanked.length, 8);
+  assert.equal(claudeRanked.length, 14);
   assert.equal(gptRanked[0]?.rank, 1);
   assert.equal(claudeRanked[0]?.rank, 1);
   assert.ok(gptRanked.every((plan) => plan.model === 'GPT'));
@@ -51,9 +48,6 @@ test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
   assert.equal(ccvibeOneM?.multiplier, 3);
   assert.equal(ccvibeOneM?.effectiveAmount, 40);
   assert.equal(ccvibeOneM?.valuePerYuan, 4);
-  assert.equal(codexKiroBundle?.rechargeAmount, 140);
-  assert.equal(codexKiroBundle?.faceValue, 1000);
-  assert.equal(codexKiroBundle?.valuePerYuan, 1000 / 1.4 / 140);
 
   const galaxyGptPlus = gptRanked.find((plan) => plan.stationId === 'galaxy' && plan.channel === 'Plus');
   const galaxyClaudeMax = claudeRanked.find((plan) => plan.stationId === 'galaxy' && plan.channel === 'max');
@@ -67,12 +61,11 @@ test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
 test('Grok 倍率按人工基线覆盖新旧站点并按充值档位展开', () => {
   const grokRanked = getRankedPlans('Grok', manualExpanded);
 
-  assert.equal(grokRanked.length, 6);
+  assert.equal(grokRanked.length, 4);
   assert.ok(grokRanked.every((plan) => plan.model === 'Grok'));
-  assert.equal(grokRanked[0]?.stationId, 'codex-for');
-  assert.equal(grokRanked[0]?.channel, '未知');
-  assert.equal(grokRanked[0]?.valuePerYuan, 1000 / 140);
-  assert.equal(grokRanked.filter((plan) => plan.stationId === 'codex-for').length, 2);
+  assert.equal(grokRanked[0]?.stationId, 'ccvibe');
+  assert.equal(grokRanked[0]?.channel, '官方');
+  assert.equal(grokRanked[0]?.valuePerYuan, 120 / 2 / 10);
   assert.deepEqual(getAvailableChannels(manualModelRates, 'Grok'), ['Heavy', '官方', '未知']);
 });
 
@@ -82,8 +75,8 @@ test('渠道筛选项按模型隔离（人工基线）', () => {
 
   assert.deepEqual(gptChannels, ['Plus', 'Pro']);
   assert.deepEqual(claudeChannels, [
-    'kiro',
     'max',
+    'kiro',
     'aws',
     'cursor',
     'max稳定',
@@ -98,7 +91,6 @@ test('Claude 倍率目录完整保留用户提供的参数', () => {
     .map((rate) => [rate.stationId, rate.channel, rate.multiplier]);
 
   assert.deepEqual(claudeRates, [
-    ['codex-for', 'kiro', 1.4],
     ['pinai', 'max', 16],
     ['pinai', 'kiro', 5],
     ['pinai', 'aws', 8],
@@ -221,8 +213,8 @@ test('自动采集接管站点后整体替换人工倍率并保留充值档位',
   assert.equal(ccvibeRows.length, 1);
   assert.equal(ccvibeRows[0]?.multiplier, 0.25);
   assert.deepEqual(ccvibeRows[0]?.offerIds, ['ccvibe-10']);
-  // 30 条人工数据减去 ccvibe 的 8 条人工行，再加上 1 条自动行。
-  assert.equal(merged.length, 23);
+  // 26 条人工数据减去 ccvibe 的 8 条人工行，再加上 1 条自动行。
+  assert.equal(merged.length, 19);
   // 未被自动采集的站点人工数据原样保留。
   assert.ok(merged.some((rate) => rate.stationId === 'pinai' && rate.channel === 'max'));
 });

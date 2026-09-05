@@ -113,61 +113,6 @@
       "status": "active"
     },
     {
-      "id": "auto-codex-for-gpt-codex混合渠道--低价-2",
-      "stationId": "codex-for",
-      "model": "GPT",
-      "channel": "codex混合渠道--低价",
-      "multiplier": 1.2,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-codex-for-gpt-纯pro渠道-7",
-      "stationId": "codex-for",
-      "model": "GPT",
-      "channel": "纯pro渠道",
-      "multiplier": 1.4,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-codex-for-claude-claudecode逆向-9",
-      "stationId": "codex-for",
-      "model": "Claude",
-      "channel": "claudecode逆向",
-      "multiplier": 1.4,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-codex-for-grok-grok-11",
-      "stationId": "codex-for",
-      "model": "Grok",
-      "channel": "grok",
-      "multiplier": 1,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-codex-for-gpt-codex混合分组-1",
-      "stationId": "codex-for",
-      "model": "GPT",
-      "channel": "codex混合分组",
-      "multiplier": 1.2,
-      "source": "https://blackaicoding.com/api/v1/groups/available",
-      "measuredAt": "2026-09-05",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-ccvibe-claude-claude-余额结算-9",
       "stationId": "ccvibe",
       "model": "Claude",

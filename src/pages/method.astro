@@ -5,9 +5,7 @@ import { formatMetric, getDataSourceLabel, getLatestMeasuredDate, getRankedPlans
 const rankedPlans = getRankedPlans('GPT');
 const latestMeasuredDate = getLatestMeasuredDate();
 const dataSourceLabel = getDataSourceLabel();
-const examplePlan = rankedPlans.find(
-  (plan) => plan.stationId === 'codex-for' && plan.channel === 'Plus' && plan.offerKind === 'bundle',
-);
+const examplePlan = rankedPlans[0];
 // 统一基础路径格式，确保返回榜单链接在 GitHub Pages 项目站点中有效。
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
@@ -46,7 +44,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
       <li><strong>模型倍率</strong><span><code>modelRates</code> 记录模型、渠道和倍率，并通过 <code>offerIds</code> 指定适用充值档位。</span></li>
       <li><strong>排名组合</strong><span>构建时把模型倍率和它引用的充值档位展开，随后计算有效额度和每元有效额度。</span></li>
     </ol>
-    <p class="structure-note">当前 Claude、Grok 参数没有单独注明充值档位，因此复用对应站点已有档位；codex for 的 kiro 和 Grok 未知渠道会展开为 140 元特殊捆绑包和 15 元普通档位。后续若确认某个倍率只适用某一档位，只需调整对应记录的 <code>offerIds</code>。</p>
+    <p class="structure-note">当前 Claude、Grok 参数没有单独注明充值档位，因此复用对应站点已有档位；同一倍率会按其引用的全部充值档位展开为多行。后续若确认某个倍率只适用某一档位，只需调整对应记录的 <code>offerIds</code>。</p>
   </section>
 
   <section class="method-grid" aria-label="计算公式">
@@ -79,7 +77,7 @@ const formatDate = (date: string) => date.replaceAll('-', '.');
       <span class="result-count">{examplePlan?.stationName} · {examplePlan?.model} · {examplePlan?.channel} · {offerLabels[examplePlan?.offerKind ?? 'bundle']} · {examplePlan?.offerLabel}</span>
     </div>
     <div class="calculation-line">
-      <div><span>有效额度</span><strong>{formatMetric(examplePlan?.effectiveAmount ?? 0)}</strong><small>1000 ÷ 1.2</small></div>
+      <div><span>有效额度</span><strong>{formatMetric(examplePlan?.effectiveAmount ?? 0)}</strong><small>{examplePlan?.faceValue ?? 0} ÷ {examplePlan?.multiplier ?? 0}</small></div>
       <span class="calculation-operator">÷</span>
       <div><span>充值金额</span><strong>{formatMetric(examplePlan?.rechargeAmount ?? 0)}</strong><small>人民币</small></div>
       <span class="calculation-operator">=</span>

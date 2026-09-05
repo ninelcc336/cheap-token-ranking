@@ -103,7 +103,6 @@ const newStationMeasuredAt = '2026-09-05';
 const officialManualSource = '官方网站人工采集';
 const initialStatus: PlanStatus = 'active';
 const standardOfferNotes = '官网充值档位';
-const bundleOfferNotes = '官网特殊捆绑包';
 const rateNotes = '官网倍率数据';
 
 /**
@@ -114,11 +113,6 @@ export const stations: Station[] = [
     id: 'token-bank',
     name: 'bank of token',
     website: 'https://api.boft.ai/',
-  },
-  {
-    id: 'codex-for',
-    name: 'codex for',
-    website: 'https://blackaicoding.com/',
   },
   {
     id: 'pinai',
@@ -149,7 +143,7 @@ export const stations: Station[] = [
 
 /**
  * 充值档位目录。相同站点的模型倍率通过 offerIds 复用这些金额和面值。
- * codex for 的 140 元记录单独保留为捆绑包，15 元记录作为普通档位。
+ * bundle 类型用于官网特殊充值活动，standard 类型用于普通充值档位。
  */
 export const rechargeOffers: RechargeOffer[] = [
   {
@@ -159,30 +153,6 @@ export const rechargeOffers: RechargeOffer[] = [
     offerLabel: '1 元档',
     rechargeAmount: 1,
     faceValue: 1,
-    source: officialManualSource,
-    measuredAt: initialMeasuredAt,
-    notes: standardOfferNotes,
-    status: initialStatus,
-  },
-  {
-    id: 'codex-for-140',
-    stationId: 'codex-for',
-    offerKind: 'bundle',
-    offerLabel: '140 元',
-    rechargeAmount: 140,
-    faceValue: 1000,
-    source: officialManualSource,
-    measuredAt: initialMeasuredAt,
-    notes: bundleOfferNotes,
-    status: initialStatus,
-  },
-  {
-    id: 'codex-for-15',
-    stationId: 'codex-for',
-    offerKind: 'standard',
-    offerLabel: '15 元',
-    rechargeAmount: 15,
-    faceValue: 100,
     source: officialManualSource,
     measuredAt: initialMeasuredAt,
     notes: standardOfferNotes,
@@ -282,30 +252,6 @@ export const manualModelRates: ModelRate[] = [
     status: initialStatus,
   },
   {
-    id: 'gpt-codex-for-plus',
-    stationId: 'codex-for',
-    model: 'GPT',
-    channel: 'Plus',
-    multiplier: 1.2,
-    offerIds: ['codex-for-140', 'codex-for-15'],
-    source: officialManualSource,
-    measuredAt: initialMeasuredAt,
-    notes: rateNotes,
-    status: initialStatus,
-  },
-  {
-    id: 'gpt-codex-for-pro',
-    stationId: 'codex-for',
-    model: 'GPT',
-    channel: 'Pro',
-    multiplier: 1.4,
-    offerIds: ['codex-for-140', 'codex-for-15'],
-    source: officialManualSource,
-    measuredAt: initialMeasuredAt,
-    notes: rateNotes,
-    status: initialStatus,
-  },
-  {
     id: 'gpt-pinai-pro-2-5',
     stationId: 'pinai',
     model: 'GPT',
@@ -355,18 +301,6 @@ export const manualModelRates: ModelRate[] = [
   },
 
   // Claude 模型的新增倍率。
-  {
-    id: 'claude-codex-for-kiro',
-    stationId: 'codex-for',
-    model: 'Claude',
-    channel: 'kiro',
-    multiplier: 1.4,
-    offerIds: ['codex-for-140', 'codex-for-15'],
-    source: officialManualSource,
-    measuredAt: initialMeasuredAt,
-    notes: rateNotes,
-    status: initialStatus,
-  },
   {
     id: 'claude-pinai-max',
     stationId: 'pinai',
@@ -560,7 +494,7 @@ export const manualModelRates: ModelRate[] = [
     notes: rateNotes,
     status: initialStatus,
   },
-  // Grok 渠道按各站点已有充值档位复用；codex for 因有两档会展开两行。
+  // Grok 渠道按各站点已有充值档位复用。
   {
     id: 'grok-token-bank-heavy',
     stationId: 'token-bank',
@@ -604,18 +538,6 @@ export const manualModelRates: ModelRate[] = [
     channel: '未知',
     multiplier: 4,
     offerIds: ['pinai-10'],
-    source: officialManualSource,
-    measuredAt: grokMeasuredAt,
-    notes: rateNotes,
-    status: initialStatus,
-  },
-  {
-    id: 'grok-codex-for-unknown',
-    stationId: 'codex-for',
-    model: 'Grok',
-    channel: '未知',
-    multiplier: 1,
-    offerIds: ['codex-for-140', 'codex-for-15'],
     source: officialManualSource,
     measuredAt: grokMeasuredAt,
     notes: rateNotes,
