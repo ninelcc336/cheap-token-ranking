@@ -25,7 +25,6 @@ npm run preview # 本地预览构建产物
 当前适配情况：
 
 - bank of token、codex for、pinai、ccvibe、Galaxy：读取登录后可见的 /api/v1/groups/available，需要对应站点账号令牌。分组名称不拘泥于 Plus、Pro 等固定叫法，接口返回的分组名会原样作为渠道进入榜单；模型归属默认由接口的 platform 字段决定，但分组名命中名称规则时以名称优先（例如 Grok 分组常挂在 openai 协议下）。名字命中排除表的生图、绘图类渠道不会采集。
-- Right Code：读取公开的 /upstreams/public，不需要令牌。显式名称规则优先（例如 Codex 映射为 Pro 渠道）；未命中规则的 upstream 按接口 type 兜底映射模型族并保留原始名称，DeepSeek、画图等非榜单渠道按排除表跳过。
 
 本地运行时，把登录后浏览器存储中的站点令牌放入环境变量，再执行采集。PowerShell 示例：
 

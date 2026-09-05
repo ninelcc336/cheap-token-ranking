@@ -26,10 +26,10 @@ const manualExpanded = expandPlans(stations, rechargeOffers, manualModelRates);
 const baselineModels: ModelFamily[] = ['GPT', 'Claude', 'Grok'];
 
 test('人工维护的三层目录保持完整并展开为基础榜单', () => {
-  assert.equal(stations.length, 6);
-  assert.equal(rechargeOffers.length, 7);
-  assert.equal(manualModelRates.length, 35);
-  assert.equal(manualExpanded.length, 39);
+  assert.equal(stations.length, 5);
+  assert.equal(rechargeOffers.length, 6);
+  assert.equal(manualModelRates.length, 30);
+  assert.equal(manualExpanded.length, 34);
   assert.deepEqual(getAvailableModels(manualModelRates), ['GPT', 'Claude', 'Grok']);
 });
 
@@ -41,8 +41,8 @@ test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
     (plan) => plan.stationId === 'codex-for' && plan.channel === 'kiro' && plan.offerKind === 'bundle',
   );
 
-  assert.equal(gptRanked.length, 13);
-  assert.equal(claudeRanked.length, 19);
+  assert.equal(gptRanked.length, 12);
+  assert.equal(claudeRanked.length, 16);
   assert.equal(gptRanked[0]?.rank, 1);
   assert.equal(claudeRanked[0]?.rank, 1);
   assert.ok(gptRanked.every((plan) => plan.model === 'GPT'));
@@ -62,26 +62,18 @@ test('GPT 与 Claude 按人工基线分别生成独立排名', () => {
   assert.equal(galaxyGptPlus?.valuePerYuan, 10);
   assert.equal(galaxyClaudeMax?.multiplier, 12);
   assert.equal(galaxyClaudeMax?.valuePerYuan, 10 / 12);
-
-  const rightCodeGptPro = gptRanked.find((plan) => plan.stationId === 'right-code' && plan.channel === 'Pro');
-  const rightCodeClaudeAws = claudeRanked.find((plan) => plan.stationId === 'right-code' && plan.channel === 'aws');
-  assert.equal(rightCodeGptPro?.faceValue, 1);
-  assert.equal(rightCodeGptPro?.multiplier, 0.4);
-  assert.equal(rightCodeGptPro?.valuePerYuan, 2.5);
-  assert.equal(rightCodeClaudeAws?.multiplier, 0.3);
-  assert.equal(rightCodeClaudeAws?.valuePerYuan, 10 / 3);
 });
 
 test('Grok 倍率按人工基线覆盖新旧站点并按充值档位展开', () => {
   const grokRanked = getRankedPlans('Grok', manualExpanded);
 
-  assert.equal(grokRanked.length, 7);
+  assert.equal(grokRanked.length, 6);
   assert.ok(grokRanked.every((plan) => plan.model === 'Grok'));
-  assert.equal(grokRanked[0]?.stationId, 'right-code');
+  assert.equal(grokRanked[0]?.stationId, 'codex-for');
   assert.equal(grokRanked[0]?.channel, '未知');
-  assert.equal(grokRanked[0]?.valuePerYuan, 1 / 0.1);
+  assert.equal(grokRanked[0]?.valuePerYuan, 1000 / 140);
   assert.equal(grokRanked.filter((plan) => plan.stationId === 'codex-for').length, 2);
-  assert.deepEqual(getAvailableChannels(manualModelRates, 'Grok'), ['未知', 'Heavy', '官方']);
+  assert.deepEqual(getAvailableChannels(manualModelRates, 'Grok'), ['Heavy', '官方', '未知']);
 });
 
 test('渠道筛选项按模型隔离（人工基线）', () => {
@@ -97,8 +89,6 @@ test('渠道筛选项按模型隔离（人工基线）', () => {
     'max稳定',
     '1M稳定',
     '1M',
-    '官方',
-    '特惠',
   ]);
 });
 
@@ -123,9 +113,6 @@ test('Claude 倍率目录完整保留用户提供的参数', () => {
     ['token-bank', 'max', 0.95],
     ['galaxy', 'kiro', 1.3],
     ['galaxy', 'max', 12],
-    ['right-code', '官方', 2],
-    ['right-code', '特惠', 1.5],
-    ['right-code', 'aws', 0.3],
   ]);
 });
 
@@ -218,7 +205,7 @@ test('非有限数值不会产生 Infinity 或 NaN 并进入排名', () => {
 test('自动采集接管站点后整体替换人工倍率并保留充值档位', () => {
   const merged = mergeAutoRateOverrides(manualModelRates, [
     {
-      stationId: 'right-code',
+      stationId: 'ccvibe',
       model: 'GPT',
       channel: 'Pro',
       multiplier: 0.25,
@@ -228,14 +215,14 @@ test('自动采集接管站点后整体替换人工倍率并保留充值档位',
     },
   ]);
 
-  // 该站点其余人工渠道（包括快照未覆盖的特惠）一并移除，避免新旧渠道并存。
-  assert.ok(!merged.some((rate) => rate.stationId === 'right-code' && rate.channel === '特惠'));
-  const rightCodeRows = merged.filter((rate) => rate.stationId === 'right-code');
-  assert.equal(rightCodeRows.length, 1);
-  assert.equal(rightCodeRows[0]?.multiplier, 0.25);
-  assert.deepEqual(rightCodeRows[0]?.offerIds, ['right-code-1']);
-  // 35 条人工数据减去 right-code 的 5 条人工行，再加上 1 条自动行。
-  assert.equal(merged.length, 31);
+  // 该站点其余人工渠道（包括快照未覆盖的 max）一并移除，避免新旧渠道并存。
+  assert.ok(!merged.some((rate) => rate.stationId === 'ccvibe' && rate.channel === 'max'));
+  const ccvibeRows = merged.filter((rate) => rate.stationId === 'ccvibe');
+  assert.equal(ccvibeRows.length, 1);
+  assert.equal(ccvibeRows[0]?.multiplier, 0.25);
+  assert.deepEqual(ccvibeRows[0]?.offerIds, ['ccvibe-10']);
+  // 30 条人工数据减去 ccvibe 的 8 条人工行，再加上 1 条自动行。
+  assert.equal(merged.length, 23);
   // 未被自动采集的站点人工数据原样保留。
   assert.ok(merged.some((rate) => rate.stationId === 'pinai' && rate.channel === 'max'));
 });

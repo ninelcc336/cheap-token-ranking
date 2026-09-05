@@ -2,11 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   mergeSuccessfulOverrides,
-  parseRightCodeUpstreams,
   parseSub2ApiGroups,
 } from './collect-rates';
 import type { CollectionResult } from './collect-rates';
-import type { RightCodeSourceConfig, Sub2ApiSourceConfig } from './rate-sources';
+import type { Sub2ApiSourceConfig } from './rate-sources';
 
 const sub2ApiConfig: Sub2ApiSourceConfig = {
   adapter: 'sub2api',
@@ -18,26 +17,6 @@ const sub2ApiConfig: Sub2ApiSourceConfig = {
     openai: 'GPT',
     anthropic: 'Claude',
   },
-};
-
-const rightCodeConfig: RightCodeSourceConfig = {
-  adapter: 'right-code',
-  stationId: 'right-code',
-  name: 'Right Code',
-  baseUrl: 'https://www.rightapi.ai',
-  rules: [
-    { match: '^Codex$', model: 'GPT', channel: 'Pro' },
-    { match: '^Claude\\s+awsq$', model: 'Claude', channel: 'aws' },
-    { match: '^Claude\\s+官方渠道$', model: 'Claude', channel: '官方' },
-    { match: '^Grok', model: 'Grok', channel: '未知' },
-  ],
-  fallbackTypeModelMap: {
-    responses: 'GPT',
-    completions: 'GPT',
-    messages: 'Claude',
-    gemini: 'Gemini',
-  },
-  excludeNamePattern: 'deepseek|画图|绘图|draw|image|tts|audio|embedding|rerank|video',
 };
 
 test('Sub2API 分组响应会解包、映射模型并保留字符串倍率', () => {
@@ -118,55 +97,6 @@ test('异常倍率会阻止整个站点覆盖旧快照', () => {
         '2026-09-04',
       ),
     /不是有效的正数字/,
-  );
-});
-
-test('Right Code 公开 upstream 会按显式规则生成倍率记录', () => {
-  const rows = parseRightCodeUpstreams(
-    {
-      upstreams: [
-        { id: 1, name: 'Codex', type: 'responses', rate: 0.4, is_active: true },
-        { id: 2, name: 'Claude 官方渠道', type: 'messages', rate: '2', is_active: true },
-        { id: 3, name: 'Claude awsq', type: 'messages', rate: 0.3, is_active: true },
-        { id: 4, name: 'Grok', type: 'responses', rate: 0.1, is_active: true },
-        { id: 5, name: 'Grok 5', type: 'responses', rate: 0.2, is_active: true },
-        { id: 6, name: '停用渠道', type: 'responses', rate: 99, is_active: false },
-      ],
-    },
-    rightCodeConfig,
-    '2026-09-04',
-  );
-
-  assert.deepEqual(
-    rows.map((row) => [row.model, row.channel, row.multiplier]),
-    [
-      ['GPT', 'Pro', 0.4],
-      ['Claude', '官方', 2],
-      ['Claude', 'aws', 0.3],
-      ['Grok', '未知', 0.1],
-      ['Grok', '未知', 0.2],
-    ],
-  );
-});
-
-test('Right Code 未命中规则的 upstream 按 type 兜底映射并保留原始名称', () => {
-  const rows = parseRightCodeUpstreams(
-    {
-      upstreams: [
-        { id: 1, name: 'Gemini', type: 'gemini', rate: 0.6, is_active: true },
-        { id: 2, name: 'DeepSeek V4 - OpenAI格式', type: 'completions', rate: 1, is_active: true },
-        { id: 3, name: '画图', type: 'completions', rate: 1, is_active: true },
-        { id: 4, name: '神秘渠道', type: 'weird-type', rate: 1, is_active: true },
-        { id: 5, name: '', type: 'responses', rate: 1, is_active: true },
-      ],
-    },
-    rightCodeConfig,
-    '2026-09-04',
-  );
-
-  assert.deepEqual(
-    rows.map((row) => [row.model, row.channel, row.multiplier]),
-    [['Gemini', 'Gemini', 0.6]],
   );
 });
 

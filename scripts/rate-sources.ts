@@ -26,28 +26,6 @@ export interface Sub2ApiSourceConfig {
   excludeNamePattern?: string;
 }
 
-export interface RightCodeRule {
-  /** 对公开接口返回的 upstream name 做不区分大小写的正则匹配。 */
-  match: string;
-  model: ModelFamily;
-  channel: string;
-}
-
-export interface RightCodeSourceConfig {
-  adapter: 'right-code';
-  stationId: string;
-  name: string;
-  baseUrl: string;
-  rules: RightCodeRule[];
-  /**
-   * 未命中显式规则的 upstream 按接口 type 推断模型族，渠道保留站点原始名称；
-   * type 缺失或未配置映射时跳过该 upstream。
-   */
-  fallbackTypeModelMap: Record<string, ModelFamily>;
-  /** 命中该正则（不区分大小写）的 upstream 一律不采集，用于排除画图、DeepSeek 等非榜单模型。 */
-  excludeNamePattern?: string;
-}
-
 export interface ManualRateSourceConfig {
   adapter: 'manual';
   stationId: string;
@@ -55,10 +33,7 @@ export interface ManualRateSourceConfig {
   reason: string;
 }
 
-export type RateSourceConfig =
-  | Sub2ApiSourceConfig
-  | RightCodeSourceConfig
-  | ManualRateSourceConfig;
+export type RateSourceConfig = Sub2ApiSourceConfig | ManualRateSourceConfig;
 
 const commonPlatformModelMap: Record<string, ModelFamily> = {
   openai: 'GPT',
@@ -73,7 +48,7 @@ const commonNameModelRules: NameModelRule[] = [{ match: 'grok', model: 'Grok' }]
 /** 各 sub2api 站点共用的分组排除表：生图、绘图等非文本模型渠道不进入榜单。 */
 const commonExcludeNamePattern = 'image|生图|绘图|画图|draw';
 
-/** 当前仓库六个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
+/** 当前仓库五个站点的采集配置；全部站点均已接入接口采集，不再依赖人工兜底。 */
 export const rateSources: RateSourceConfig[] = [
   {
     adapter: 'sub2api',
@@ -124,25 +99,5 @@ export const rateSources: RateSourceConfig[] = [
     platformModelMap: { ...commonPlatformModelMap, antigravity: 'Claude' },
     nameModelRules: commonNameModelRules,
     excludeNamePattern: commonExcludeNamePattern,
-  },
-  {
-    adapter: 'right-code',
-    stationId: 'right-code',
-    name: 'Right Code',
-    baseUrl: 'https://www.rightapi.ai',
-    rules: [
-      { match: '^Codex$', model: 'GPT', channel: 'Pro' },
-      { match: '^Claude\\s+awsq$', model: 'Claude', channel: 'aws' },
-      { match: '^Claude\\s+官方渠道$', model: 'Claude', channel: '官方' },
-      // 前缀匹配覆盖后续新增的 Grok 变体名称，避免它们落进 responses→GPT 的兜底映射。
-      { match: '^Grok', model: 'Grok', channel: '未知' },
-    ],
-    fallbackTypeModelMap: {
-      responses: 'GPT',
-      completions: 'GPT',
-      messages: 'Claude',
-      gemini: 'Gemini',
-    },
-    excludeNamePattern: 'deepseek|画图|绘图|draw|image|tts|audio|embedding|rerank|video',
   },
 ];

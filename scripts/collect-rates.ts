@@ -14,7 +14,6 @@ import {
   rateSources,
   type ManualRateSourceConfig,
   type RateSourceConfig,
-  type RightCodeSourceConfig,
   type Sub2ApiSourceConfig,
 } from './rate-sources';
 
@@ -157,52 +156,6 @@ export function parseSub2ApiGroups(
   return overrides;
 }
 
-/**
- * 将 Right Code 的公开 upstream 列表转换为本站倍率记录。
- * 显式规则优先（可重命名渠道）；未命中的 upstream 按接口 type 兜底映射模型族，
- * 渠道保留站点原始名称，避免站点新增分组时被静默丢弃。
- */
-export function parseRightCodeUpstreams(
-  payload: unknown,
-  config: RightCodeSourceConfig,
-  measuredAt: string,
-): AutoRateOverride[] {
-  const data = unwrapResponse(payload);
-  const items = Array.isArray(data) ? data : isRecord(data) && Array.isArray(data.upstreams) ? data.upstreams : null;
-  if (!items) throw new Error('upstreams/public 返回缺少 upstreams 数组');
-
-  const compiledRules = config.rules.map((rule) => ({ ...rule, expression: new RegExp(rule.match, 'i') }));
-  const excludePattern = config.excludeNamePattern ? new RegExp(config.excludeNamePattern, 'i') : null;
-  const source = config.baseUrl + '/upstreams/public';
-  const overrides: AutoRateOverride[] = [];
-  items.forEach((item, index) => {
-    if (!isRecord(item) || item.is_active === false) return;
-    const name = String(item.name ?? '').trim();
-    const rule = compiledRules.find((candidate) => candidate.expression.test(name));
-    let model: ModelFamily;
-    let channel: string;
-    if (rule) {
-      model = rule.model;
-      channel = rule.channel;
-    } else {
-      if (!name || (excludePattern && excludePattern.test(name))) return;
-      const upstreamType = String(item.type ?? '').trim().toLowerCase();
-      const fallbackModel = config.fallbackTypeModelMap[upstreamType];
-      if (!fallbackModel) return;
-      model = fallbackModel;
-      channel = name;
-    }
-    const multiplier = toPositiveNumber(item.rate, '上游 ' + name + ' 的 rate');
-    const sourceId = String(item.id ?? index);
-    overrides.push(createOverride(config.stationId, model, channel, multiplier, sourceId, source, measuredAt));
-  });
-
-  if (overrides.length === 0) {
-    throw new Error('没有匹配到 Right Code 配置的 upstream，拒绝覆盖旧数据');
-  }
-  return overrides;
-}
-
 async function requestJson(url: string, token?: string): Promise<unknown> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), requestTimeoutMs);
@@ -251,36 +204,25 @@ export async function collectSource(
   }
 
   try {
-    if (config.adapter === 'sub2api') {
-      const token = process.env[config.tokenEnv]?.trim();
-      if (!token) {
-        return {
-          stationId: config.stationId,
-          name: config.name,
-          status: 'skipped',
-          overrides: [],
-          message: '未配置环境变量 ' + config.tokenEnv,
-        };
-      }
-      const payload = await requestJson(
-        normalizedBaseUrl(config.baseUrl) + '/api/v1/groups/available',
-        token,
-      );
+    const token = process.env[config.tokenEnv]?.trim();
+    if (!token) {
       return {
         stationId: config.stationId,
         name: config.name,
-        status: 'success',
-        overrides: parseSub2ApiGroups(payload, config, measuredAt),
+        status: 'skipped',
+        overrides: [],
+        message: '未配置环境变量 ' + config.tokenEnv,
       };
     }
-
-    const rightCodeConfig: RightCodeSourceConfig = config;
-    const payload = await requestJson(normalizedBaseUrl(rightCodeConfig.baseUrl) + '/upstreams/public');
+    const payload = await requestJson(
+      normalizedBaseUrl(config.baseUrl) + '/api/v1/groups/available',
+      token,
+    );
     return {
-      stationId: rightCodeConfig.stationId,
-      name: rightCodeConfig.name,
+      stationId: config.stationId,
+      name: config.name,
       status: 'success',
-      overrides: parseRightCodeUpstreams(payload, rightCodeConfig, measuredAt),
+      overrides: parseSub2ApiGroups(payload, config, measuredAt),
     };
   } catch (error) {
     return {
