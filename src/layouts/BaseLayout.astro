@@ -11,6 +11,7 @@ const { title, description } = Astro.props;
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 const homeHref = base;
+const iqHref = `${base}iq/`;
 const methodHref = `${base}method/`;
 ---
 
@@ -48,6 +49,7 @@ const methodHref = `${base}method/`;
           </a>
           <nav class="site-nav" aria-label="主导航">
             <a href={homeHref}>排行榜</a>
+            <a href={iqHref}>智商检测</a>
             <a href={methodHref}>计算方法</a>
             <button
               class="theme-toggle"

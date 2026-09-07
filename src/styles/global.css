@@ -1455,3 +1455,234 @@ h3 {
     scroll-behavior: auto;
   }
 }
+
+/*
+ * 智商检测题页：沿用榜单的面板结构，题目卡片内按
+ * 推荐模型 → 题面 → 结果 → 引用展开；配色全部复用 tag 变量。
+ */
+.iq-list-wrap {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0 0 8px 8px;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.q-card {
+  padding: 26px 28px;
+}
+
+.q-card + .q-card {
+  border-top: 1px solid var(--line);
+}
+
+.q-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.q-card-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+.q-index {
+  color: var(--accent);
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.q-card-title h3 {
+  overflow-wrap: anywhere;
+}
+
+.q-card-badges {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.strength-badge {
+  padding: 3px 8px;
+  border: 1px solid;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.strength-badge--high {
+  background: var(--tag-red-bg);
+  border-color: var(--tag-red-line);
+  color: var(--tag-red-text);
+}
+
+.strength-badge--medium {
+  background: var(--tag-yellow-bg);
+  border-color: var(--tag-yellow-line);
+  color: var(--tag-yellow-text);
+}
+
+.strength-badge--low {
+  background: var(--tag-green-bg);
+  border-color: var(--tag-green-line);
+  color: var(--tag-green-text);
+}
+
+.strength-badge--default {
+  background: var(--tag-default-bg);
+  border-color: var(--tag-default-line);
+  color: var(--tag-default-text);
+}
+
+.model-chip {
+  display: inline-block;
+  padding: 3px 7px;
+  border: 1px solid var(--tag-default-line);
+  border-radius: 2px;
+  background: var(--tag-default-bg);
+  color: var(--tag-default-text);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.model-chip--accent {
+  background: var(--tag-blue-bg);
+  border-color: var(--tag-blue-line);
+  color: var(--tag-blue-text);
+}
+
+.q-models {
+  margin: 14px 0 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.q-models-label {
+  color: var(--soft-muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.q-prompt {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.q-prompt-text {
+  margin: 0;
+  flex: 1 1 auto;
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.q-prompt-text code {
+  font-family: inherit;
+}
+
+.copy-btn {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.copy-btn:hover,
+.copy-btn:focus-visible {
+  border-color: var(--accent);
+  background: var(--control-hover);
+  color: var(--accent-dark);
+}
+
+.copy-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.copy-btn.is-copied {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.q-answer-text {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.q-subsection {
+  margin-bottom: 18px;
+}
+
+.q-card .q-subsection:last-child {
+  margin-bottom: 0;
+}
+
+.q-subsection-title {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--soft-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.q-ref-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.q-ref-list a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.q-ref-list a:hover,
+.q-ref-list a:focus-visible {
+  color: var(--accent-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .q-card {
+    padding: 18px 16px;
+  }
+}

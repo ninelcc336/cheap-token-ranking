@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "tsx --test src/data/plans.test.ts scripts/collect-rates.test.ts",
+    "test": "tsx --test src/data/plans.test.ts src/data/iq-tests.test.ts scripts/collect-rates.test.ts",
     "collect-rates": "tsx scripts/collect-rates.ts"
   },
   "dependencies": {
