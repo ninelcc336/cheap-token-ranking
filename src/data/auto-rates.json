@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-11T16:39:35.916Z",
+  "generatedAt": "2026-09-11T19:23:10.271Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -443,66 +443,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gpt-openai高速独立通道-openai高速独立通道",
-      "stationId": "maoai",
-      "model": "GPT",
-      "channel": "OpenAI高速独立通道",
-      "multiplier": 0.32,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-12",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gpt-svip-svip",
-      "stationId": "maoai",
-      "model": "GPT",
-      "channel": "SVIP",
-      "multiplier": 1,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-12",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gpt-专属福利分组-专属福利分组",
-      "stationId": "maoai",
-      "model": "GPT",
-      "channel": "专属福利分组",
-      "multiplier": 0.09,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-12",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gpt-openai稳定通道-openai稳定通道",
-      "stationId": "maoai",
-      "model": "GPT",
-      "channel": "OpenAI稳定通道",
-      "multiplier": 0.15,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-12",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gpt-vip-vip",
-      "stationId": "maoai",
-      "model": "GPT",
-      "channel": "VIP",
-      "multiplier": 1,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-12",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-maoai-gemini-gemini-cli-按量-gemini-cli-按量",
       "stationId": "maoai",
       "model": "Gemini",
       "channel": "gemini cli 按量",
       "multiplier": 0.45,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-12",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
+      "stationId": "maoai",
+      "model": "Claude",
+      "channel": "ccmax 2",
+      "multiplier": 1.1,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-12",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -564,11 +520,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
+      "id": "auto-maoai-gpt-openai高速独立通道-openai高速独立通道",
       "stationId": "maoai",
-      "model": "Claude",
-      "channel": "ccmax 2",
-      "multiplier": 1.1,
+      "model": "GPT",
+      "channel": "OpenAI高速独立通道",
+      "multiplier": 0.32,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-12",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gpt-svip-svip",
+      "stationId": "maoai",
+      "model": "GPT",
+      "channel": "SVIP",
+      "multiplier": 1,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-12",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -580,6 +547,39 @@
       "model": "Grok",
       "channel": "grok稳定",
       "multiplier": 0.3,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-12",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gpt-openai稳定通道-openai稳定通道",
+      "stationId": "maoai",
+      "model": "GPT",
+      "channel": "OpenAI稳定通道",
+      "multiplier": 0.15,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-12",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gpt-vip-vip",
+      "stationId": "maoai",
+      "model": "GPT",
+      "channel": "VIP",
+      "multiplier": 1,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-12",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gpt-专属福利分组-专属福利分组",
+      "stationId": "maoai",
+      "model": "GPT",
+      "channel": "专属福利分组",
+      "multiplier": 0.09,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-12",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
