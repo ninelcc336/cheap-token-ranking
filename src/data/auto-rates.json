@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T23:45:41.772Z",
+  "generatedAt": "2026-09-22T02:45:13.005Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -454,22 +454,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
+      "id": "auto-maoai-claude-claude-kiro-claude-kiro",
       "stationId": "maoai",
       "model": "Claude",
-      "channel": "ccmax 2",
-      "multiplier": 1.2,
+      "channel": "claude kiro",
+      "multiplier": 0.15,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-22",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-claude-kiro-claude-kiro",
+      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
       "stationId": "maoai",
       "model": "Claude",
-      "channel": "claude kiro",
-      "multiplier": 0.15,
+      "channel": "ccmax 2",
+      "multiplier": 1.2,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-22",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -492,6 +492,17 @@
       "model": "Grok",
       "channel": "grok稳定",
       "multiplier": 0.2,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-09-22",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-grok-grok-grok",
+      "stationId": "maoai",
+      "model": "Grok",
+      "channel": "grok",
+      "multiplier": 0.12,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-22",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -558,17 +569,6 @@
       "model": "GPT",
       "channel": "gpt官key",
       "multiplier": 0.75,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-22",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-grok-grok-grok",
-      "stationId": "maoai",
-      "model": "Grok",
-      "channel": "grok",
-      "multiplier": 0.12,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-22",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
