@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T07:02:06.412Z",
+  "generatedAt": "2026-09-30T14:01:05.404Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -454,28 +454,6 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-ccmax-ccmax",
-      "stationId": "maoai",
-      "model": "Claude",
-      "channel": "ccmax",
-      "multiplier": 0.85,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-30",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
-      "stationId": "maoai",
-      "model": "Claude",
-      "channel": "ccmax 2",
-      "multiplier": 1.2,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-30",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-maoai-claude-ccmax-3-ccmax-3",
       "stationId": "maoai",
       "model": "Claude",
@@ -503,17 +481,6 @@
       "model": "Claude",
       "channel": "claude krio3",
       "multiplier": 0.5,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-09-30",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-grok-grok稳定-grok稳定",
-      "stationId": "maoai",
-      "model": "Grok",
-      "channel": "grok稳定",
-      "multiplier": 0.2,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-30",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -586,11 +553,11 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-grok-grok-grok",
+      "id": "auto-maoai-grok-grok稳定-grok稳定",
       "stationId": "maoai",
       "model": "Grok",
-      "channel": "grok",
-      "multiplier": 0.12,
+      "channel": "grok稳定",
+      "multiplier": 0.2,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-09-30",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
