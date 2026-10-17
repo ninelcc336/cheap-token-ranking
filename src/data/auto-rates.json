@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-17T18:39:54.091Z",
+  "generatedAt": "2026-10-17T21:10:39.444Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -454,17 +454,6 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-claude-aws-claude-aws",
-      "stationId": "maoai",
-      "model": "Claude",
-      "channel": "claude aws",
-      "multiplier": 0.75,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-10-18",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-maoai-claude-claude-kiro-claude-kiro",
       "stationId": "maoai",
       "model": "Claude",
@@ -564,11 +553,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gemini-gemini-cli-gemini-cli",
+      "id": "auto-maoai-grok-grok-grok",
       "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini cli",
-      "multiplier": 1,
+      "model": "Grok",
+      "channel": "grok",
+      "multiplier": 0.12,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-10-18",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-grok-grok稳定-grok稳定",
+      "stationId": "maoai",
+      "model": "Grok",
+      "channel": "grok稳定",
+      "multiplier": 0.2,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-10-18",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -597,22 +597,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-grok-grok-grok",
+      "id": "auto-maoai-claude-claude-aws-claude-aws",
       "stationId": "maoai",
-      "model": "Grok",
-      "channel": "grok",
-      "multiplier": 0.12,
+      "model": "Claude",
+      "channel": "claude aws",
+      "multiplier": 0.75,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-10-18",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
       "status": "active"
     },
     {
-      "id": "auto-maoai-grok-grok稳定-grok稳定",
+      "id": "auto-maoai-gemini-gemini-cli-gemini-cli",
       "stationId": "maoai",
-      "model": "Grok",
-      "channel": "grok稳定",
-      "multiplier": 0.2,
+      "model": "Gemini",
+      "channel": "gemini cli",
+      "multiplier": 1,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-10-18",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
