@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-28T01:57:51.691Z",
+  "generatedAt": "2026-10-28T07:58:03.556Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -542,28 +542,6 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-claude-krio3-claude-krio3",
-      "stationId": "maoai",
-      "model": "Claude",
-      "channel": "claude krio3",
-      "multiplier": 0.45,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-10-28",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-claude-测试-测试",
-      "stationId": "maoai",
-      "model": "Claude",
-      "channel": "测试",
-      "multiplier": 1,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-10-28",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
       "id": "auto-maoai-claude-ccmax-3-ccmax-3",
       "stationId": "maoai",
       "model": "Claude",
@@ -586,10 +564,21 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gemini-gemini-cli-gemini-cli",
+      "id": "auto-maoai-claude-claude-krio3-claude-krio3",
       "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini cli",
+      "model": "Claude",
+      "channel": "claude krio3",
+      "multiplier": 0.45,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-10-28",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-claude-测试-测试",
+      "stationId": "maoai",
+      "model": "Claude",
+      "channel": "测试",
       "multiplier": 1,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-10-28",
@@ -613,6 +602,17 @@
       "model": "Gemini",
       "channel": "gemini-anti-ultra",
       "multiplier": 0.45,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-10-28",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gemini-gemini-cli-gemini-cli",
+      "stationId": "maoai",
+      "model": "Gemini",
+      "channel": "gemini cli",
+      "multiplier": 1,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-10-28",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
