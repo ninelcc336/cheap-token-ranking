@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-05T01:34:49.763Z",
+  "generatedAt": "2026-11-05T08:50:16.200Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -443,11 +443,11 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
+      "id": "auto-maoai-claude-bug-kiro-bug-kiro",
       "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini-anti-ultra",
-      "multiplier": 0.45,
+      "model": "Claude",
+      "channel": "bug-kiro",
+      "multiplier": 0.05,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -597,11 +597,11 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-grok-grok-grok",
+      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
       "stationId": "maoai",
-      "model": "Grok",
-      "channel": "grok",
-      "multiplier": 0.12,
+      "model": "Gemini",
+      "channel": "gemini-anti-ultra",
+      "multiplier": 0.45,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -613,6 +613,17 @@
       "model": "Grok",
       "channel": "grok稳定",
       "multiplier": 0.2,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-11-05",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-grok-grok-grok",
+      "stationId": "maoai",
+      "model": "Grok",
+      "channel": "grok",
+      "multiplier": 0.12,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-05",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
