@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-07T16:00:33.206Z",
+  "generatedAt": "2026-11-07T20:22:19.785Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -498,6 +498,28 @@
       "status": "active"
     },
     {
+      "id": "auto-maoai-gemini-gemini-cli-按量-gemini-cli-按量",
+      "stationId": "maoai",
+      "model": "Gemini",
+      "channel": "gemini cli 按量",
+      "multiplier": 0.38,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-11-08",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
+      "stationId": "maoai",
+      "model": "Gemini",
+      "channel": "gemini-anti-ultra",
+      "multiplier": 0.45,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-11-08",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
       "id": "auto-maoai-gpt-openai稳定通道-openai稳定通道",
       "stationId": "maoai",
       "model": "GPT",
@@ -569,28 +591,6 @@
       "model": "GPT",
       "channel": "专属福利分组",
       "multiplier": 0.08,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-11-08",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gemini-gemini-cli-按量-gemini-cli-按量",
-      "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini cli 按量",
-      "multiplier": 0.38,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-11-08",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
-      "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini-anti-ultra",
-      "multiplier": 0.45,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-08",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
