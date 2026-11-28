@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T18:37:05.430Z",
+  "generatedAt": "2026-11-28T01:44:36.277Z",
   "overrides": [
     {
       "id": "auto-token-bank-gpt-gpt--free-10",
@@ -443,11 +443,22 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
+      "id": "auto-maoai-gemini-gemini-cli-按量-gemini-cli-按量",
       "stationId": "maoai",
-      "model": "Claude",
-      "channel": "ccmax 2",
-      "multiplier": 1.3,
+      "model": "Gemini",
+      "channel": "gemini cli 按量",
+      "multiplier": 0.38,
+      "source": "https://api.maoapi.org/api/pricing",
+      "measuredAt": "2026-11-28",
+      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
+      "status": "active"
+    },
+    {
+      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
+      "stationId": "maoai",
+      "model": "Gemini",
+      "channel": "gemini-anti-ultra",
+      "multiplier": 0.55,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-28",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -597,22 +608,11 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gemini-gemini-anti-ultra-gemini-anti-ultra",
+      "id": "auto-maoai-claude-ccmax-2-ccmax-2",
       "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini-anti-ultra",
-      "multiplier": 0.55,
-      "source": "https://api.maoapi.org/api/pricing",
-      "measuredAt": "2026-11-28",
-      "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
-      "status": "active"
-    },
-    {
-      "id": "auto-maoai-gemini-gemini官key-gemini官key",
-      "stationId": "maoai",
-      "model": "Gemini",
-      "channel": "gemini官key",
-      "multiplier": 1.5,
+      "model": "Claude",
+      "channel": "ccmax 2",
+      "multiplier": 1.3,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-28",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
@@ -641,11 +641,11 @@
       "status": "active"
     },
     {
-      "id": "auto-maoai-gemini-gemini-cli-按量-gemini-cli-按量",
+      "id": "auto-maoai-gemini-gemini官key-gemini官key",
       "stationId": "maoai",
       "model": "Gemini",
-      "channel": "gemini cli 按量",
-      "multiplier": 0.38,
+      "channel": "gemini官key",
+      "multiplier": 1.5,
       "source": "https://api.maoapi.org/api/pricing",
       "measuredAt": "2026-11-28",
       "notes": "通过官网接口自动读取；充值金额和美元面值仍由人工维护。",
